@@ -1,0 +1,30 @@
+.headimg{
+	margin: 0 8px;
+	background-color: #5a5a5a79;
+	border: rgba(0, 0, 0, 0.5) solid 3px;
+}
+a{
+	color: rgb(58, 56, 56);
+}
+.head:hover{
+	rotate: -5deg;
+	z-index: 100;
+}
+.head{
+	cursor: pointer;
+	display: flex;
+}
+.head:hover>.brifeInfo{
+	height: 500px;
+	
+	/*left: 100px;*/
+}
+.brifeInfo{
+	overflow: hidden;
+	left: 100px;
+	rotate: 5deg;
+	position: absolute;
+	width: 200px;
+	height: 0px;
+	background-color: #fff;
+}

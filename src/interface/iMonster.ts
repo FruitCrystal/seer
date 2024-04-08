@@ -7,11 +7,14 @@ import iLearnableMove from "./iLearnableMove";
 
 export default interface iMonster{
 
-	Monsters:{Monster:Array<iMonsterInner>}
+	Monsters:{Monster:Array<iMonsterDetail>}
 
 }
 
-interface iMonsterInner{
+/**
+ * 	精灵详细数据,包括技能,属性ID,种族值,ID,名字,进化信息
+ */
+export interface iMonsterDetail{
 		/**
  * @param learnableMoves 可习得技能
  */

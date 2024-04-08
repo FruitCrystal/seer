@@ -1,4 +1,5 @@
 /**
+import { iItem } from './iItem';
  * 特殊效果描述,如中毒等异常,蒂朵的场地特效等其他魂印中会高亮提示的字眼
  * eg.{
                 "id": 1,
@@ -17,6 +18,13 @@
             },
  */
 export interface iEffectDes{
+	root:{
+		item:effect_des[]
+	}
+
+	
+}
+export interface effect_des{
 	id: number;
 	kind?: number;
 	/**

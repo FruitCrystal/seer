@@ -1,0 +1,19 @@
+.main {
+	/*scale: 1;*/
+	font-size: 14px;
+	animation-name: show;
+	animation-duration: 0.9s;
+	/*animation-delay: 0.2s;*/
+}
+
+@keyframes show {
+	0% {
+		scale: 0;
+	}
+	100% {
+		scale: 1;
+	}
+}
+.head {
+	margin-right: 20px;
+}

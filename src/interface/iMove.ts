@@ -1,4 +1,13 @@
 export interface iMove {
+	Moves:{
+		Move:move[]
+	}
+	SideEffects: {
+		SideEffect: iSideEffect[]
+}
+}
+
+export interface move{
 	ID: number;
 	Name: string;
 	Category: number;
@@ -21,6 +30,14 @@ export interface iSideEffect {
 }
 
 export interface iHideMoves{
+
+	root:{
+		item:hide_move[]
+	}
+
+}
+
+export interface hide_move{
 	/**
 	 * @param moveId 技能ID
 	 * 

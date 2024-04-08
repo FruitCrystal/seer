@@ -12,6 +12,14 @@
  */
 
 export interface iEffectIcon{
+
+	root:{
+		effect:effect_icon[]
+	}
+	
+}
+
+export interface effect_icon{
 	id: number;
 	petid: number;
 	iconid: number;

@@ -2,8 +2,10 @@
  * 技能效果ID
  */
 export interface iEffectInfo{
-	ParamType:ParamType
-	Effect:Effect
+	root:{
+		Effect:Effect[]
+		ParamType:ParamType[]
+	}
 }
 export interface ParamType{
 	id: number;
