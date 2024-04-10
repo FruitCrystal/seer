@@ -1,6 +1,6 @@
 export default interface iLearnableMove{
-	move: {
+	Move: [{
 		ID: number;
-		learningLv: number;
-	};
+		LearningLv: number;
+	}];
 }

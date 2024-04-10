@@ -2,14 +2,13 @@ import { useState } from 'react';
 import styles from './PetCard.module.css';
 import PetInfoDetail from './PetInfoDetail/PetInfoDetail';
 import  { iMonsterDetail } from '../../interface/iMonster';
-import { brife_info } from '../../interface/iPetBook';
+import { MonsterBrief } from '../../interface/iPetBook';
 /**
  *
  * 精灵展示卡,包含了精灵的名称,简介信息,身高体重,ID,系别,种族值
  */
-const PetCard = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetail; monsterBrief: brife_info }) => {
+const PetCard = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetail; monsterBrief: MonsterBrief }) => {
 	const [overLay, setOverLay] = useState(false);
-	console.log(monsterBrief, monsterDetail);
 	return (
 		<div className={styles.pet_card} onClick={() => setOverLay(true)}>
 			<div
@@ -29,7 +28,10 @@ const PetCard = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetai
 					left: 0,
 				}}
 			>
-				<PetInfoDetail></PetInfoDetail>
+				<PetInfoDetail
+					monsterDetail={monsterDetail}
+					monsterBrief={monsterBrief}
+					></PetInfoDetail>
 			</div>
 			<div>
 				<img

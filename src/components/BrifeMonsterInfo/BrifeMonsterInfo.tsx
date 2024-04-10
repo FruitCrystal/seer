@@ -1,6 +1,6 @@
-import {brife_info} from '../../interface/iPetBook'
+import {MonsterBrief} from '../../interface/iPetBook'
 
-export const BrifeMonsterInfo = ({info}:{info:brife_info}) => {
+export const BrifeMonsterInfo = ({info}:{info:MonsterBrief}) => {
 	return (
 		<div>
 			<p>{info.DefName}</p>

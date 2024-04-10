@@ -16,10 +16,14 @@ export interface IPetBook {
 				place:[{ID:number}]
 			}
 		}
-		Monster:brife_info[]
+		Monster:MonsterBrief[]
 	}
 }
-export interface brife_info{
+
+/**
+ * 精灵的简洁信息,不包括种族,技能,进化阶段之类的数据
+ */
+export interface MonsterBrief{
 	ID:number,
 	Features:string,
 	Type:string,

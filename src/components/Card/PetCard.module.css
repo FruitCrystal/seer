@@ -1,4 +1,5 @@
 .pet_card {
+	min-width: 350px;
 	width: 350px;
 	margin: 8px;
 	background-color: rgba(220, 246, 250, 0.35);

@@ -1,100 +1,80 @@
+import { Effect, iEffectInfo } from '../../interface/iEffect';
+import { MoveDetail, iMove } from '../../interface/iMove';
+import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
-import {memo} from 'react';
-const SkillPanel = memo(()=> {
-
-	/**
-	 * 一个对象,包括的技能名字,技能的效果ID,以及效果的参数
-	 * {name:"诅咒",effectID:"4 4 4",effectArgs:"0 100 1 1 100 1 4 100 -1"}
-	 * ...
-	 */
-	//const SKILL_EFFECTS_DETAIL: {
-	//	name: string;
-	//	effectID: string | undefined;
-	//	effectArgs: string | undefined;
-	//} = { name: move.Name, effectID: move?.SideEffect?.toString(), effectArgs: move.SideEffectArg?.toString() };
-
-
-	//技能效果ID:数组:[4 4 4]
-	//const SKILL_EFFECT_ID = typeof SKILL_EFFECTS_DETAIL.effectID != 'undefined' ? SKILL_EFFECTS_DETAIL.effectID?.split(' ') : [];
-
-	////技能效果参数:数组[0 100 1 1 100 1 4 100 -1],为什么这个获取总会出错?
-	//const SKILL_EFFECT_ARGS = typeof SKILL_EFFECTS_DETAIL.effectArgs != 'undefined' ? SKILL_EFFECTS_DETAIL.effectArgs?.split(' ') : [];
-
-	/**
-	 * 将所有技能效果与其ID映射成Map
-	 */
-	//let EFFECT_MAP_BY_ID = new Map<number,iMoveEffect>()
-	//function effectDesArrayToMap(){
-	//	paramType.map((item)=>EFFECT_MAP_BY_ID.set(item.id,item))
-	//	//console.log(EFFECT_MAP_BY_ID)
-	//}
-	//effectDesArrayToMap();
-
-
-	/**
-	 * 按特定情况讨论,如"瞪眼"之类的强化/弱化类技能的效果代码只有4/5两个,较容易讨论,且提升状态的参数是乱序的,因此需要额外讨论.
-	 * 异常状态类相关技能太多,无法逐一讨论
-	 */
-	//	function generateSkillDesPlus():string{
-	//		let des = ''
-	//		if(SKILL_EFFECT_ID.find(v=>v=="4"||v=="5"||v=="585")){
-				
-	//			generateSkillDescreption();
-	//			return"施工中..."}
-	//		SKILL_EFFECT_ID.map(i=>{
-	//				des= generateSkillDescreption()
-	//		}
-	//	);	
-	//		return des;
-	//	}
-		
-	///**
-	// * 用于生成一般技能的描述,无法生成如"瞪眼"之类的强化/弱化类技能的描述
-	// * @returns 
-	// */
-	//function generateSkillDescreption(){
-	//	if(!SKILL_EFFECTS_DETAIL.effectArgs) return''
-	//	if (!SKILL_EFFECT_ID) return '';
-  //  let des = SKILL_EFFECTS_DETAIL.effectID?.split(' ').map((item, index) => EFFECT_MAP_BY_ID.get(parseInt(item))?.info+";").join('') as string;
-	//	let length = des.length;
-	//	des = des.slice(0,length-1)
-	//	length = des.length;
-  //  if (!des) return '';
-  //  let desArray = [];
-  //  const skillArgsArray = SKILL_EFFECTS_DETAIL.effectArgs?.split(' ');
-  //  for (let i = 0; i < length; i++) {
-  //      const currentChar = des[i];
-  //      if (currentChar == '{') {
-  //          if (skillArgsArray.length > 0) {
-  //              desArray.push(skillArgsArray.shift());
-  //          }
-	//					i+=2
-  //      } else {
-  //          desArray.push(currentChar);
-  //      }
-  //  }
-	//	//console.log(SKILL_EFFECTS_DETAIL)
-  //  return desArray.join('');
-	//}
+import { useContext } from 'react';
+const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number,extraMoveID?:(number |undefined)[] }) => {
 	
-	///**
-	// * 技能描述转Map
-	// * 1=>造成伤害的一半回复体力....
-	// */
+	const data = useContext(dataContext);
 
-		let move={
-			Category:1,
-			Priority:1,
-			MustHit:0,
-			CritRate:75,
-			Accuracy:100,
-			info:"造成伤害，并使目标受到伤害。",
-			learningLv:10,
-			ID:10001,
-			Name:"攻击",
-			SideEffect:4,
-			SideEffectArg:100,
-		}
+	const movesData: iMove = data.get('moves');
+	/**
+	 * @param move 根据props传来的技能ID，获取到该技能的详细的数据
+	 */
+	const move: MoveDetail = movesData.MovesTbl.Moves.Move.find((item: MoveDetail) => item.ID === moveID) as MoveDetail;
+
+	/**
+	 * @param moveEffect 从数据库中获取的技能效果数据
+	 */
+	const moveEffect: iEffectInfo = data.get('effectInfo');
+
+	/**
+	 * @param EffectID 单个技能所持有的效果ID
+	 */
+	const EffectID = typeof move.SideEffect === 'string' ? move.SideEffect.split(' ') : [move.SideEffect];
+
+	/**
+	 * @param EffectArg 单个技能所持有的**所有**效果参数
+	 */
+	const EffectArg = typeof move.SideEffectArg === 'string' ? move.SideEffectArg.split(' ') : [move.SideEffectArg as number];
+
+	function generateSkillDesPlus() {
+		let desList: (string | undefined)[] = [];
+		type TYPE_SKILL_INFO = {
+			技能ID: number;
+			技能名: string;
+			技能描述及参数: [
+				{
+					效果描述: string | undefined;
+					参数: string[] | number[];
+					技能效果ID: any;
+					该描述所需参数数量: number | undefined;
+					特殊描述标记: boolean;
+				}
+			];
+		};
+		let SKILL_INFO: TYPE_SKILL_INFO = {
+			技能ID: move.ID,
+			技能名: move.Name,
+			技能描述及参数: [{ 效果描述: '', 参数: [], 技能效果ID: EffectID, 该描述所需参数数量: 0, 
+			/**
+			 * @param {boolean} 特殊描述标记
+			 * 
+			 */
+			特殊描述标记: false }],
+		};
+
+		/**
+		 *根据技能效果ID，从effectInfo中获取技能效果描述，并将其添加到SKILL_INFO的技能描述列表中
+		 */
+		EffectID.forEach((item, index) => {
+			let skill = moveEffect.root.Effect.find((i) => i.id == item);
+
+			SKILL_INFO.技能描述及参数[index] = {
+				效果描述: skill?.info,
+				参数: EffectArg?.splice(0, skill?.argsNum),
+				技能效果ID: item,
+				该描述所需参数数量: skill?.argsNum,
+
+				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number)
+				|| skill?.info.match(/\d/g)?.join('').includes('102')? true : false
+			};
+			desList.push(skill?.info);
+		});
+		//console.log(SKILL_INFO);
+		return desList;
+	}
+	console.log({type:move.Type,name:move.Name,power:move.Power,maxPP:move.MaxPP,category:move.Category,priority:move.Priority,mustHit:move.MustHit,accuracy:move.Accuracy,critRate:move.CritRate,info:move.info,sideEffect:move.SideEffect,sideEffectArg:move.SideEffectArg});
 	return (
 		<div className="">
 			<div className={styles.panel}>
@@ -103,13 +83,13 @@ const SkillPanel = memo(()=> {
 					alt="属性"
 					width={30}
 					height={30}
-					src={`http://seerh5.61.com/resource/assets/PetType/5.png`}
+					src={`http://seerh5.61.com/resource/assets/PetType/${move.AtkType==3?'prop':move.Type}.png`}
 				/>
 				<div className={styles.info}>
-					<p style={{ color: 'rgb(153, 255, 255)' }}>技能名字</p>
+					<p style={{ color: 'rgb(153, 255, 255)' }}>{move.Name}</p>
 					{/*技能威力假定为150*/}
-					<p style={{ color: 'rgb(255, 255, 0)' }}>{150 ? '威力:' + 150 : '威力:0'}</p>
-					<p style={{ color: 'white' }}>{'PP：' + 50}</p>
+					<p style={{ color: 'rgb(255, 255, 0)' }}>{move.Power ? '威力:' + move.Power : '威力:0'}</p>
+					<p style={{ color: 'white' }}>{'PP：' + move.MaxPP}</p>
 				</div>
 				<div className={styles.desc}>
 					<h3
@@ -122,15 +102,19 @@ const SkillPanel = memo(()=> {
 					</h3>
 					<h4 style={move.Priority == 0 ? { display: 'none' } : { display: 'block' }}>{move.Priority ? '先制:' + move.Priority : null}</h4>
 					{move.MustHit == 1 ? <p style={{ fontSize: 18, color: 'rgb(100,225,249)' }}>必中</p> : null}
-					<div>学习等级:{10}</div>
-					<div style={{display:move.MustHit==1?"none":"block"}}>精准度:{move.Accuracy}</div>
-					<div style={{ display:move.Category == 4 && move.ID>=20000?"none":'block' }}>暴击率:{typeof move.CritRate === 'undefined'?"1":move.CritRate}/16</div>
+					<div>学习等级:{learningLv}</div>
+					<div style={{ display: move.MustHit == 1 ? 'none' : 'block' }}>精准度:{move.Accuracy}</div>
+					<div style={{ display: move.Category == 4 && move.ID >= 20000 ? 'none' : 'block' }}>
+						暴击率:{typeof move.CritRate === 'undefined' ? '1' : move.CritRate}/16
+					</div>
 					<div style={{ color: 'rgb(183,178,178)' }}>{move.info}</div>
-					{/*<div style={{ color: 'rgb(80,216,253)' }}>{generateSkillDesPlus().split(";").map((item:any,index:number)=><div key={index} style={{marginBottom:3}}><span>{item.length>0?`效果${index+1}：`:''}</span>{item}</div>)}</div>*/}
+					<div style={{ color: 'rgb(80,216,253)' }}>
+						<div style={{ marginBottom: 3 }}>{generateSkillDesPlus()}</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	);
-					})
-SkillPanel.displayName="SkillPanel"
+};
+SkillPanel.displayName = 'SkillPanel';
 export default SkillPanel;

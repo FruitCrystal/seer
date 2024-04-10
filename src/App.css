@@ -6,4 +6,19 @@
 body {
   font-family: 'seerFont'
 }
+#root {
+  margin: 0 auto;
+  /*text-align: center;*/
+}
 
+*::-webkit-scrollbar {
+	width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background: rgba(0,0,0,0.2);
+}
+*::-webkit-scrollbar-track {
+	border-radius: 0;
+	background: rgba(0,0,0,0.1);
+}

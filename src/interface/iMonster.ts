@@ -15,10 +15,25 @@ export default interface iMonster{
  * 	精灵详细数据,包括技能,属性ID,种族值,ID,名字,进化信息
  */
 export interface iMonsterDetail{
+	SpExtraMoves?:{
+		ID:number,
+		LearningLv:number,
+	}
+	ExtraMoves?:{
+		Move:{
+			ID:number,
+			LearningLv?:number,
+		}
+	}
+
+	ExtraMove?:{
+		ID:number,
+		LearningLv?:number,
+	}
 		/**
- * @param learnableMoves 可习得技能
+ * @param LearnableMoves 可习得技能
  */
-		learnableMoves: iLearnableMove;
+		LearnableMoves: iLearnableMove;
 		/**
 		 * @param ID 精灵ID(1~5000)
 		 */
@@ -95,3 +110,58 @@ export interface iMonsterDetail{
 		Type:string
 }
 
+/**
+ * 精灵图鉴信息,包括热门精灵,本周更新精灵,以及所有精灵的简介信息,但不包括其技能,种族
+ */
+export interface IPetBook {
+	root:{
+		Hotspot:{
+			item:{place:[{ID:number,type:number,MonID:number}]}
+		}
+		PetCollect:{
+			Branch:{
+				Collect:[{monID:number}]
+			}
+		}
+		HotPet:{
+			item:{
+				place:[{ID:number}]
+			}
+		}
+		Monster:MonsterBrief[]
+	}
+}
+
+/**
+ * 精灵的简洁信息,不包括种族,技能,进化阶段之类的数据
+ */
+export interface MonsterBrief{
+	ID:number,
+	Features:string,
+	Type:string,
+	Food?:string,
+	Height?:number,
+	Weight?:number,
+	DefName:string
+}
+
+export interface iPetSkin {
+	Skin:[]
+}
+
+export interface skin {
+	/**
+	 * @param ID 皮肤ID
+	 */
+	ID:number,
+	AddWay:number,
+	/**
+	 * @param MonID 所属精灵ID
+	 */
+	MonID:number,
+	/**
+	 * @param Name 皮肤名称
+	 */
+	Name:string,
+	Occasion:number,
+}
