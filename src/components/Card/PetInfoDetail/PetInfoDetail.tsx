@@ -21,7 +21,7 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 	 */
 	const effect =  HunYin.root.effect.find((item) => item.petId === monsterDetail.ID)?.tips;
 
-	console.log({'精灵名字:': monsterDetail.DefName, '魂印效果:': effect});
+	//console.log({'精灵名字:': monsterDetail.DefName, '魂印效果:': effect});
 	return (
 		<div
 			className={styles.main}

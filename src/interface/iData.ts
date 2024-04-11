@@ -16,3 +16,17 @@ export let PROGRESS_MAP: Map<string, string> = new Map([
 	['pet_skin', '精灵皮肤'],
 	['ogre', '宝石']
 ]);
+
+export const DescriptionMapping:{AbilityMapping:{[key:number]:string},[key:string]:{[key:number]:string}} = {
+	AbilityMapping:{
+		0:'攻击',
+		1:'特攻',
+		2:"防御",
+		3:"特防",
+		4:"速度",
+		5:"命中"
+	},
+	YiChang:{
+
+	}
+}

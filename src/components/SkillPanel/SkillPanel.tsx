@@ -1,10 +1,10 @@
+import { DescriptionMapping } from '../../interface/iData';
 import { Effect, iEffectInfo } from '../../interface/iEffect';
 import { MoveDetail, iMove } from '../../interface/iMove';
 import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
 import { useContext } from 'react';
-const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number,extraMoveID?:(number |undefined)[] }) => {
-	
+const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number; extraMoveID?: (number | undefined)[] }) => {
 	const data = useContext(dataContext);
 
 	const movesData: iMove = data.get('moves');
@@ -29,6 +29,8 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 	const EffectArg = typeof move.SideEffectArg === 'string' ? move.SideEffectArg.split(' ') : [move.SideEffectArg as number];
 
 	function generateSkillDesPlus() {
+		let finalResult = '';
+
 		let desList: (string | undefined)[] = [];
 		type TYPE_SKILL_INFO = {
 			技能ID: number;
@@ -46,12 +48,19 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 		let SKILL_INFO: TYPE_SKILL_INFO = {
 			技能ID: move.ID,
 			技能名: move.Name,
-			技能描述及参数: [{ 效果描述: '', 参数: [], 技能效果ID: EffectID, 该描述所需参数数量: 0, 
-			/**
-			 * @param {boolean} 特殊描述标记
-			 * 
-			 */
-			特殊描述标记: false }],
+			技能描述及参数: [
+				{
+					效果描述: '',
+					参数: [],
+					技能效果ID: EffectID,
+					该描述所需参数数量: 0,
+					/**
+					 * @param {boolean} 特殊描述标记
+					 *
+					 */
+					特殊描述标记: false,
+				},
+			],
 		};
 
 		/**
@@ -65,16 +74,48 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 				参数: EffectArg?.splice(0, skill?.argsNum),
 				技能效果ID: item,
 				该描述所需参数数量: skill?.argsNum,
-
-				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number)
-				|| skill?.info.match(/\d/g)?.join('').includes('102')? true : false
+				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number),
+				//|| skill?.info.match(/\d/g)?.join('').includes('102')? true : false
 			};
-			desList.push(skill?.info);
 		});
 		//console.log(SKILL_INFO);
-		return desList;
+		SKILL_INFO.技能描述及参数.forEach((item) => {
+			if (item.效果描述) {
+				if (item.特殊描述标记) {
+					finalResult = '该技能描述暂时无法生成';
+					return;
+				} else {
+					let desList = item.效果描述?.split('');
+					let length = desList.length;
+					let isAbilityAdvance = item.效果描述.match(/\d/g)?.join('').includes('102');
+					if (isAbilityAdvance) {
+						console.log(SKILL_INFO);
+						let abilityID = item.参数[0];
+						let ability = DescriptionMapping.AbilityMapping[parseInt(abilityID as string)];
+						let des = item.效果描述;
+						let isNegative = parseInt(item.参数[2]as string)>0?false:true;
+						finalResult = des.replace("{0}",ability).replace("{1}",item.参数[1]+'').replace("{2}",!isNegative?'+'+item.参数[2]+'':''+item.参数[2]+'');
+					} else {
+						for (let i = 0; i < length; i++) {
+							if (desList[i] === '{') {
+								finalResult += '';
+								let index = desList[i + 1];
+								finalResult += item.参数[parseInt(index)];
+								i++;
+								i++;
+							} else {
+								finalResult += desList[i];
+							}
+						}
+					}
+				}
+			}
+			if (finalResult.length > 0) {
+				finalResult += '。';
+			}
+		});
+		return finalResult;
 	}
-	console.log({type:move.Type,name:move.Name,power:move.Power,maxPP:move.MaxPP,category:move.Category,priority:move.Priority,mustHit:move.MustHit,accuracy:move.Accuracy,critRate:move.CritRate,info:move.info,sideEffect:move.SideEffect,sideEffectArg:move.SideEffectArg});
 	return (
 		<div className="">
 			<div className={styles.panel}>
@@ -83,7 +124,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 					alt="属性"
 					width={30}
 					height={30}
-					src={`http://seerh5.61.com/resource/assets/PetType/${move.AtkType==3?'prop':move.Type}.png`}
+					src={`http://seerh5.61.com/resource/assets/PetType/${move.Category == 4 ? 'prop' : move.Type}.png`}
 				/>
 				<div className={styles.info}>
 					<p style={{ color: 'rgb(153, 255, 255)' }}>{move.Name}</p>
