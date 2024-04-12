@@ -6,6 +6,7 @@ import { MonsterBrief, iMonsterDetail } from '../../../interface/iMonster';
 import { dataContext } from '../../../utils/context';
 import { iEffectIcon } from '../../../interface/iEffect';
 import {iMove} from '../../../interface/iMove';
+import {MonsterHead} from '../../MonsterHead/MonsterHead';
 
 const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetail; monsterBrief: MonsterBrief }) => {
 	const data = useContext(dataContext);
@@ -58,13 +59,16 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 							left: 5,
 						}}
 					>
-						<img
+						<MonsterHead
+							id={monsterBrief.ID}
+							></MonsterHead>
+						{/*<img
 							src={`http://seerh5.61.com/resource/assets/pet/head/${monsterBrief.ID}.png`}
 							alt=""
 							height={65}
 							width={65}
 							className={styles.head}
-						/>
+						/>*/}
 					</div>
 					<div>
 						<div

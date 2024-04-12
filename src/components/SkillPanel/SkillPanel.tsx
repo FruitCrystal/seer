@@ -29,9 +29,8 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 	const EffectArg = typeof move.SideEffectArg === 'string' ? move.SideEffectArg.split(' ') : [move.SideEffectArg as number];
 
 	function generateSkillDesPlus() {
-		let finalResult = '';
+		let finalResult = '';//最终结果
 
-		let desList: (string | undefined)[] = [];
 		type TYPE_SKILL_INFO = {
 			技能ID: number;
 			技能名: string;
@@ -62,34 +61,51 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 				},
 			],
 		};
-
 		/**
 		 *根据技能效果ID，从effectInfo中获取技能效果描述，并将其添加到SKILL_INFO的技能描述列表中
 		 */
 		EffectID.forEach((item, index) => {
 			let skill = moveEffect.root.Effect.find((i) => i.id == item);
-
 			SKILL_INFO.技能描述及参数[index] = {
 				效果描述: skill?.info,
 				参数: EffectArg?.splice(0, skill?.argsNum),
 				技能效果ID: item,
 				该描述所需参数数量: skill?.argsNum,
-				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number),
-				//|| skill?.info.match(/\d/g)?.join('').includes('102')? true : false
+				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item!=201,
 			};
 		});
-		//console.log(SKILL_INFO);
+		/**
+		 * 逐个描述进行数据对其
+		 */
 		SKILL_INFO.技能描述及参数.forEach((item) => {
 			if (item.效果描述) {
 				if (item.特殊描述标记) {
-					finalResult = '该技能描述暂时无法生成';
-					return;
+					if(item.该描述所需参数数量!==6){
+						console.log(item);
+					}
+					if(item.该描述所需参数数量 === 6){
+						//console.log(item);
+						let insert = ''
+						item.参数.forEach((param,index) => {
+							let isNegative = parseInt(param as string)>0?false:true;
+							//console.log(isNegative);
+							let value:string = isNegative?'-'+parseInt(param as string):'+'+parseInt(param as string);
+							param!=0?insert+=(DescriptionMapping.AbilityMapping[index]+value):insert+='';
+							if(index<=4){
+								insert+="，"
+							}
+						})
+						finalResult=item.效果描述.replace('{0}',insert);
+					}else{
+						finalResult = '该技能描述暂时无法生成';
+						console.log(item);
+						return;
+					}
 				} else {
 					let desList = item.效果描述?.split('');
 					let length = desList.length;
 					let isAbilityAdvance = item.效果描述.match(/\d/g)?.join('').includes('102');
 					if (isAbilityAdvance) {
-						console.log(SKILL_INFO);
 						let abilityID = item.参数[0];
 						let ability = DescriptionMapping.AbilityMapping[parseInt(abilityID as string)];
 						let des = item.效果描述;
@@ -115,7 +131,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 			}
 		});
 		return finalResult;
-	}
+	};
 	return (
 		<div className="">
 			<div className={styles.panel}>
