@@ -17,7 +17,7 @@ export let PROGRESS_MAP: Map<string, string> = new Map([
 	['ogre', '宝石']
 ]);
 
-export const DescriptionMapping:{AbilityMapping:{[key:number]:string},[key:string]:{[key:number]:string}} = {
+export const DescriptionMapping:{AbilityMapping:{[key:number]:string},[key:string]:{[key:number]:string},YiChang:{[key:number]:string}} = {
 	AbilityMapping:{
 		0:'攻击',
 		1:'特攻',
@@ -27,6 +27,31 @@ export const DescriptionMapping:{AbilityMapping:{[key:number]:string},[key:strin
 		5:"命中"
 	},
 	YiChang:{
-
+		0:"麻痹",
+		1:"中毒",
+		2:"烧伤",
+		4:"寄生",
+		5:"冻伤",
+		6:"害怕",
+		7:"疲惫",
+		8:"睡眠",
+		9:"石化",
+		10:"混乱",
+		11:"衰弱",
+		12:"山神守护",
+		13:"易燃",
+		14:"狂暴",
+		15:"冰封",
+		16:"流血",
+		19:"瘫痪",
+		20:"失明",
+		22:"焚烬",
+		23:"诅咒",
+		27:"感染",
+		28:"束缚",
+		29:"失神",
+		30:"沉默",
+		31:"臣服",
+		32:"凝滞",
 	}
 }

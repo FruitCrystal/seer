@@ -1,16 +1,27 @@
 import { useState } from 'react';
-import iMonster, {iMonsterDetail} from '../../interface/iMonster';
+import iMonster, { iMonsterDetail } from '../../interface/iMonster';
 import PetCard from '../../components/Card/PetCard';
-import {MonsterBrief} from '../../interface/iMonster';
+import { MonsterBrief } from '../../interface/iMonster';
+import {  getSomeRandomPetID } from '../../utils/tools';
 
-export const Pet = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonster,monsterBrief: MonsterBrief[] }) => {
+export const Pet = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonster; monsterBrief: MonsterBrief[] }) => {
 	//console.log(pets);
 	const [id, setId] = useState(300);
+	//let monster = monsterDetail.Monsters.Monster.find((i) => i.ID === id);
+	//let monster_brief = monsterBrief.find((i) => i.ID === id);
+
+	let randomID = getSomeRandomPetID(9, 1, 5000);
 	return (
-		<div style={{display:"flex",flexDirection:"column" ,width:350}}>
-			<input type="number" onChange={(e) => setId(parseInt(e.target.value))} />
-			<div>{id >= 1 ? monsterDetail.Monsters.Monster.find((i) => i.ID === id)?.DefName : '请输入正确的id'}</div>
-			{id>=1&&id<=5000 ? <PetCard monsterBrief={monsterBrief.find((i) => i.ID === id) as MonsterBrief} monsterDetail={monsterDetail.Monsters.Monster.find((i) => i.ID === id) as iMonsterDetail}></PetCard> : null}
+		<div style={{ display: 'flex', flexWrap: 'wrap' }}>
+			<button onClick={() => setId(id - 1)}>Random</button>
+			{randomID.map((i) => (
+				monsterBrief[i]?
+				<PetCard
+					key={i}
+					monsterBrief={monsterBrief[i] as MonsterBrief}
+					monsterDetail={monsterDetail.Monsters.Monster[i] as iMonsterDetail}
+				></PetCard>:null
+			))}
 		</div>
 	);
 };

@@ -90,4 +90,5 @@ export interface Effect{
 	id: number;
 	argsNum: number;
 	info: string;
+	param?: string;
 }

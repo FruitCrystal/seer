@@ -13,7 +13,7 @@ export const Home = ({ version }: { version: string }) => {
 		<div className={styles.home}>
 			<div className={styles.content}>
 				<div className={styles.news}>
-					<h1>本周更新精灵</h1>
+					<h5>本周更新精灵</h5>
 					<div style={{ display: 'flex' }}>
 						{petBook.root.Hotspot.item.place.map((place) =>
 							place.type == 0 ? (
