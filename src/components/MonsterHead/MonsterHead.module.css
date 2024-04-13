@@ -1,11 +1,10 @@
 .headimg{
 	margin: 0;
 	padding: 0;
+	width: 65px;
+	height: 65px;
 	background-color: #5a5a5a79;
 	border: rgba(0, 0, 0, 0.5) solid 3px;
-}
-.head{
-	width: 89px;
 }
 a{
 	color: rgb(58, 56, 56);

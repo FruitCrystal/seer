@@ -1,6 +1,4 @@
 import styles from './MonsterHead.module.css';
-import { BrifeMonsterInfo } from '../BrifeMonsterInfo/BrifeMonsterInfo';
-import { MonsterBrief } from '../../interface/iPetBook';
 export const MonsterHead = ({ id }: { id: number}) => {
 	return (
 		<div className={styles.head}>

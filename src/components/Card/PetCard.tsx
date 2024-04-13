@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './PetCard.module.css';
 import PetInfoDetail from './PetInfoDetail/PetInfoDetail';
-import  { iMonsterDetail } from '../../interface/iMonster';
+import  { IPetBook } from '../../interface/iMonster';
 import { MonsterBrief } from '../../interface/iPetBook';
+import {dataContext} from '../../utils/context';
 /**
  *
  * 精灵展示卡,包含了精灵的名称,简介信息,身高体重,ID,系别,种族值
  */
-const PetCard = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetail; monsterBrief: MonsterBrief }) => {
+const PetCard = ({id}:{id:number}) => {
 	const [overLay, setOverLay] = useState(false);
+	const data = useContext(dataContext);
+	const monsterDetail = data.get('monsters').Monsters.Monster.find((item: {ID: number;}) => item.ID === id);
+	const pet_book:IPetBook = data.get('petbook')
+	const monsterBrief = pet_book.root.Monster.find((item: MonsterBrief) => item.ID === id) as MonsterBrief;
 	return (
 		<div className={styles.pet_card} onClick={() => setOverLay(true)}>
 			<div
 				onClick={(e) => {
+					
 					setOverLay(false);
 					e.stopPropagation();
 				}}
@@ -29,8 +35,7 @@ const PetCard = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetai
 				}}
 			>
 				<PetInfoDetail
-					monsterDetail={monsterDetail}
-					monsterBrief={monsterBrief}
+					petID={id}
 					></PetInfoDetail>
 			</div>
 			<div>

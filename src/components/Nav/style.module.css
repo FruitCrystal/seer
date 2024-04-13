@@ -1,0 +1,35 @@
+.nav {
+	overflow: hidden;
+	width: 100%;
+	background-color: #64849684;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+}
+
+.nav_button{
+	position: absolute;
+	width: 45px;
+	height: 45px;
+	background-color: transparent;
+	z-index: 100;
+	top: 0;
+}
+.nav > a > li {
+	display: flex;
+	text-align: center;
+  align-items: center;
+  justify-content: space-around;
+	height: 75px;
+	width: 100%;
+	text-align: center;
+}
+.nav > a {
+	width: 100%;
+	line-height: 75px;
+}
+
+.nav > a > li:hover {
+	background-color: #648496;
+}

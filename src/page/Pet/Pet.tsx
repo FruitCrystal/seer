@@ -1,27 +1,28 @@
-import { useState } from 'react';
-import iMonster, { iMonsterDetail } from '../../interface/iMonster';
+import { useContext, useState } from 'react';
+import iMonster, {IPetBook} from '../../interface/iMonster';
 import PetCard from '../../components/Card/PetCard';
-import { MonsterBrief } from '../../interface/iMonster';
-import {  getSomeRandomPetID } from '../../utils/tools';
+import { IMonsterBrief } from '../../interface/iMonster';
+import {dataContext} from '../../utils/context';
+//import {  getSomeRandomPetID } from '../../utils/tools';
 
-export const Pet = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonster; monsterBrief: MonsterBrief[] }) => {
+export const Pet = () => {
 	//console.log(pets);
-	const [id, setId] = useState(300);
-	//let monster = monsterDetail.Monsters.Monster.find((i) => i.ID === id);
-	//let monster_brief = monsterBrief.find((i) => i.ID === id);
-
-	let randomID = getSomeRandomPetID(9, 1, 5000);
+	const data = useContext(dataContext);
+	const petBook:IPetBook = data.get("petbook")
+	console.log(data);
+	const NewPets:number[] = [];
+	petBook.root.Hotspot.item.place.map(i=>NewPets.push(i.MonID))
 	return (
 		<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-			<button onClick={() => setId(id - 1)}>Random</button>
-			{randomID.map((i) => (
+			<PetCard id={5000}></PetCard>
+			{/*<button onClick={() => setId(id - 1)}>Random</button>*/}
+			{/*{randomID.map((i) => (
 				monsterBrief[i]?
 				<PetCard
 					key={i}
-					monsterBrief={monsterBrief[i] as MonsterBrief}
-					monsterDetail={monsterDetail.Monsters.Monster[i] as iMonsterDetail}
+					id={monsterBrief[i].ID}
 				></PetCard>:null
-			))}
+			))}*/}
 		</div>
 	);
 };

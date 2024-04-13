@@ -75,7 +75,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 				该描述所需参数数量: skill?.argsNum,
 				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item != 201,
 			};
-		});console.log(SKILL_INFO);
+		});
 		/**
 		 * 逐个描述进行数据对其
 		 */
@@ -83,11 +83,9 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 			if (item.效果描述) {
 				if (item.特殊描述标记) {
 					if (item.该描述所需参数数量 === 6) {
-						//console.log(item);
 						let insert = '';
 						item.参数.forEach((param, index) => {
 							let isNegative = parseInt(param as string) > 0 ? false : true;
-							//console.log(isNegative);
 							let value: string = isNegative ? '-' + parseInt(param as string) : '+' + parseInt(param as string);
 							param != 0 ? (insert += DescriptionMapping.AbilityMapping[index] + value) : (insert += '');
 							if (index <= 4 && param != 0) {
@@ -100,7 +98,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 
 						//一、数组切片，划分每个参数位所需的参数个数，通常来说，一个参数位只容纳一个参数，但这类技能有一个参数为会容纳6个参数（攻击、特攻、防御、特防、速度、命中各对应一个参数），所以需要特殊处理
 						finalResult += item.效果描述;
-						console.log(item);
 						return;
 					}
 				} else {
@@ -187,7 +184,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 	}
 
 	return (
-		<div className="">
 			<div className={styles.panel}>
 				<img
 					className={styles.shuxinglogo}
@@ -202,7 +198,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 					<p style={{ color: 'rgb(255, 255, 0)' }}>{move.Power ? '威力:' + move.Power : '威力:0'}</p>
 					<p style={{ color: 'white' }}>{'PP：' + move.MaxPP}/{move.MaxPP}</p>
 				</div>
-				<div className={styles.desc}>
+				<div className={styles.desc} >
 					<h3
 						//三目运算符匹配三个条件以上
 						style={
@@ -237,7 +233,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 					</div>
 				</div>
 			</div>
-		</div>
 	);
 };
 SkillPanel.displayName = 'SkillPanel';

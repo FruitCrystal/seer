@@ -2,14 +2,17 @@ import styles from './info.module.css';
 import Power from './power/Power';
 import SkillPanel from '../../SkillPanel/SkillPanel';
 import { useContext } from 'react';
-import { MonsterBrief, iMonsterDetail } from '../../../interface/iMonster';
+import { IPetBook, IMonsterBrief, iMonsterDetail } from '../../../interface/iMonster';
 import { dataContext } from '../../../utils/context';
 import { iEffectIcon } from '../../../interface/iEffect';
-import {iMove} from '../../../interface/iMove';
 import {MonsterHead} from '../../MonsterHead/MonsterHead';
 
-const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonsterDetail; monsterBrief: MonsterBrief }) => {
+const PetInfoDetail = ({ petID }: { petID: number }) => {
 	const data = useContext(dataContext);
+
+	const monsterDetail:iMonsterDetail = data.get('monsters').Monsters.Monster.find((item: {ID: number;}) => item.ID === petID);
+	const pet_book:IPetBook = data.get('petbook')
+	const monsterBrief = pet_book.root.Monster.find((item: IMonsterBrief) => item.ID === petID) as IMonsterBrief;
 	const HunYin: iEffectIcon = data.get('effectIcon');
 	/**
 	 * @param ExtraMoveID 额外技能,包括特训给的第五技能，活动道具开启的第五技能，神谕给的第五技能
@@ -33,7 +36,7 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 				height: '75%',
 				backgroundColor: '#fff',
 				display: 'grid',
-				gridTemplateColumns: '220px 0px 790px',
+				gridTemplateColumns: '220px 790px',
 				position: 'relative',
 				gridTemplateRows: '1fr',
 				left: '8%',
@@ -41,7 +44,9 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 				cursor: 'default',
 			}}
 		>
-			<div style={{ backgroundColor: '#498' }}>
+			<div
+			className={styles.left}
+			>
 				<div
 					style={{
 						gridArea: '1/1',
@@ -51,7 +56,7 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 				>
 					ID:{monsterBrief.ID}
 				</div>
-				<div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+				<div style={{ display: 'flex', justifyContent: 'space-between'}}>
 					<div
 						style={{
 							height: 'auto',
@@ -91,7 +96,7 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 						</div>
 					</div>
 				</div>
-				<div>
+				<div style={{}}>
 					<div style={{ fontSize: 20, color: 'gold' }}>
 						种族值:
 						{monsterDetail.Atk + monsterDetail.Def + monsterDetail.HP + monsterDetail.Spd + monsterDetail.SpAtk + monsterDetail.SpDef}
@@ -121,16 +126,7 @@ const PetInfoDetail = ({ monsterDetail, monsterBrief }: { monsterDetail: iMonste
 					))}
 				</div>
 			</div>
-			<div style={{ backgroundColor: '#198', overflow: 'hidden' }}>
-				<div
-					style={{
-						position: 'relative',
-					}}
-				>
-					<img src={`https://seerh5.61.com/resource/assets/fightResource/pet/11.png`} alt="" className={styles.head} />
-				</div>
-			</div>
-			<div style={{ backgroundColor: '#fff', display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', justifyContent: 'flex-start' }}>
+			<div className={styles.right}>
 				{monsterDetail.LearnableMoves.Move.map((item) => (
 					<SkillPanel
 						key={item.ID}
