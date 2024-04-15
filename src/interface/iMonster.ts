@@ -15,10 +15,7 @@ export default interface iMonster{
  * 	精灵详细数据,包括技能,属性ID,种族值,ID,名字,进化信息
  */
 export interface iMonsterDetail{
-	SpExtraMoves?:{
-		ID:number,
-		LearningLv:number,
-	}
+	SpExtraMoves?:{Move:{ID:number,LearningLv:number}}
 	ExtraMoves?:{
 		Move:{
 			ID:number,
@@ -116,16 +113,16 @@ export interface iMonsterDetail{
 export interface IPetBook {
 	root:{
 		Hotspot:{
-			item:{place:[{ID:number,type:number,MonID:number}]}
+			item:{place:{ID:number,type:number,MonID:number}[]}
 		}
 		PetCollect:{
 			Branch:{
-				Collect:[{monID:number}]
+				Collect:{monID:number}[]
 			}
 		}
 		HotPet:{
 			item:{
-				place:[{ID:number}]
+				place:{ID:number}[]
 			}
 		}
 		Monster:IMonsterBrief[]

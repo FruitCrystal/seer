@@ -1,6 +1,7 @@
 export default interface iLearnableMove{
-	Move: [{
+	AdvMove?:[{ID:number,Tag:number}],
+	Move: {
 		ID: number;
 		LearningLv: number;
-	}];
+	}[];
 }

@@ -1,29 +1,60 @@
 import PetCard from '../../components/Card/PetCard';
 import { IPetBook } from '../../interface/iPetBook';
 import styles from './home.module.css';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { dataContext } from '../../utils/context';
-
+import { iPvPBan } from '../../interface/iPvpBan';
+import {FakeLoading} from '../../components/FakeLoading/FakeLoading';
 
 export const Home = () => {
+	console.log("Home 组件重新渲染了！");
 	const data = useContext(dataContext);
 	const petBook: IPetBook = data.get('petbook');
 	const version = data.get('version');
-	return (
+	const pvp_ban: iPvPBan = data.get('pvp_ban');
+	const [loading,setLoading] = useState(true)
+	useEffect(() => {
+		setLoading(false)
+	}, [])
+	return (loading?<FakeLoading></FakeLoading>:
 		<div className={styles.home}>
 			<div className={styles.content}>
 				<div className={styles.main}>
 					<div className={styles.news}>
-						<h2>本周更新精灵</h2>
+						<h2 style={{width: '100%',textAlign: 'center',backgroundColor:"#bfbfbf"}}>本周更新精灵</h2>
 						<div style={{ display: 'flex' }}>
 							{petBook.root.Hotspot.item.place.map((place) =>
-								place.type == 0 ? <PetCard key={place.ID} id={place.ID}></PetCard> : null
+								place.type == 0 ? <div key={place.ID}  style={{marginRight: 10}}><PetCard id={place.ID}></PetCard></div> : null
 							)}
 						</div>
-					</div>
+						
 				</div>
+				<div style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+						<h2 style={{width: '100%',textAlign: 'center',backgroundColor:"#bfbfbf"}}>本周巅峰竞技池</h2>
+						<div className="pvp_ban" style={{display: 'flex',flexDirection: 'row'}}>
+							<div className="pvp_ban_first" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+								<h3 style={{width: '100%',textAlign: 'center',backgroundColor:"#efefef"}}>准限制级</h3>
+								<div className="pvp_ban_first_list" style={{ display: 'flex' ,flexWrap: 'wrap',height:400,width: 370,overflowY: 'scroll'}}>
+									{pvp_ban.data[0].name.split(';').map((name) => (
+										<PetCard key={name} id={parseInt(name)}></PetCard>
+									))}
+								</div>
+							</div>
+							<div className="pvp_ban_second" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><h3 style={{width: '100%',textAlign: 'center',backgroundColor:"#efefef"}}>限制级</h3>
+							<div className="pvp_ban_second_list" style={{ display: 'flex' ,flexWrap: 'wrap',height:400,width: 370,overflowY: 'scroll'}}>
+								
+								{pvp_ban.data[1].name.split(';').map((name) => (
+										<PetCard key={name} id={parseInt(name)}></PetCard>
+									))}
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
 			</div>
 			<p style={{ margin: 0, fontSize: '10px', position: 'absolute', right: 0, bottom: 0 }}>版本号：{version}</p>
 		</div>
 	);
 };
+
+export default Home;

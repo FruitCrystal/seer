@@ -1,11 +1,12 @@
 .nav {
 	overflow: hidden;
-	width: 100%;
+	/*width: 100%;*/
 	background-color: #64849684;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	justify-items: center;
+	min-width: 120px;
 }
 
 .nav_button{
@@ -14,7 +15,7 @@
 	height: 45px;
 	background-color: transparent;
 	z-index: 100;
-	top: 0;
+	top: -10px;
 }
 .nav > a > li {
 	display: flex;

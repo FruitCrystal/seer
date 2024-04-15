@@ -4,16 +4,16 @@
 export interface IPetBook {
 	root:{
 		Hotspot:{
-			item:{place:[{ID:number,type:number,MonID:number}]}
+			item:{place:{ID:number,type:number,MonID:number}[]}
 		}
 		PetCollect:{
 			Branch:{
-				Collect:[{monID:number}]
+				Collect:{monID:number}[]
 			}
 		}
 		HotPet:{
 			item:{
-				place:[{ID:number}]
+				place:{ID:number}[]
 			}
 		}
 		Monster:MonsterBrief[]

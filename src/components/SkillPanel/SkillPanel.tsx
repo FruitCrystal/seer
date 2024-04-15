@@ -3,9 +3,22 @@ import { iEffectInfo } from '../../interface/iEffect';
 import { MoveDetail, iMove } from '../../interface/iMove';
 import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
-import { useContext } from 'react';
-const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number; extraMoveID?: (number | undefined)[] }) => {
+import {  useContext, useMemo, useRef } from 'react';
+const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: number; extraMoveID?: (number | undefined)[] }) => {
 	const data = useContext(dataContext);
+	const DES_REF:any = useRef();
+	//useEffect(()=>{
+	//	const intersectionObserver = new IntersectionObserver((entries) => {
+	//		// 如果 intersectionRatio 为 0，则目标在视野外，
+	//		// 我们不需要做任何事情。
+	//		if (entries[0].intersectionRatio <1){
+	//			console.log(entries[0].rootBounds);
+	//		}
+	//	});
+	//	// 开始监听
+	//	intersectionObserver.observe(DES_REF.current);
+	//})
+	
 
 	const movesData: iMove = data.get('moves');
 	/**
@@ -22,15 +35,19 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 	 * @param EffectID 单个技能所持有的效果ID
 	 */
 	const EffectID = typeof move.SideEffect === 'string' ? move.SideEffect.split(' ') : [move.SideEffect];
-
+	//console.log(move);
 	//const EffectTypeParam = moveEffect.root.Effect.find((item) => item.id === EffectID[0])?.param;
 	/**
 	 * @param EffectArg 单个技能所持有的**所有**效果参数
 	 */
 	const EffectArg = typeof move.SideEffectArg === 'string' ? move.SideEffectArg.split(' ') : [move.SideEffectArg as number];
+	const MemogenerateSkillDesPlus = useMemo(generateSkillDesPlus,[moveID])
 	function generateSkillDesPlus() {
-		let EffectTypeParam: string = '';
 		let finalResult = ''; //最终结果
+		if(localStorage.getItem(moveID.toString())){
+			return localStorage.getItem(moveID.toString()) as string;
+		}
+		let EffectTypeParam: string = '';
 		type TYPE_SKILL_INFO = {
 			技能ID: number;
 			技能名: string;
@@ -61,7 +78,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 				},
 			],
 		};
-
+		//console.log(SKILL_INFO);
 		/**
 		 *根据技能效果ID，从effectInfo中获取技能效果描述，并将其添加到SKILL_INFO的技能描述列表中
 		 */
@@ -180,6 +197,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 				}
 			}
 		}
+		localStorage.setItem(move.ID+"", finalResult);
 		return finalResult.replace('++', '+').replace('。。', '。').replace("222","混沌");
 	}
 
@@ -198,7 +216,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 					<p style={{ color: 'rgb(255, 255, 0)' }}>{move.Power ? '威力:' + move.Power : '威力:0'}</p>
 					<p style={{ color: 'white' }}>{'PP：' + move.MaxPP}/{move.MaxPP}</p>
 				</div>
-				<div className={styles.desc} >
+				<div id='desc' className={styles.desc} ref={DES_REF}>
 					<h3
 						//三目运算符匹配三个条件以上
 						style={
@@ -216,8 +234,8 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv: number
 					</div>
 					<div style={{ color: 'rgb(183,178,178)' }}>{move.info}</div>
 					<div style={{ color: 'rgb(80,216,253)' }}>
-						<div style={{ marginBottom: 3 }}>
-							{generateSkillDesPlus()
+						<div style={{ marginBottom: 3,fontSize: 11, }}>
+							{MemogenerateSkillDesPlus
 								.split('。')
 								.map((item, index) =>
 									item ? (

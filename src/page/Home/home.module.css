@@ -1,21 +1,21 @@
 .home{
+	display: flex;
+	flex-wrap: wrap;
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	animation: show .5s ease-in-out forwards;
 	/*background-color: rgb(92, 90, 90);*/
 }
-
-.content{
+.news{
 	display: flex;
-	position: relative;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	/*background-color: #c1464659;*/
-	overflow-y: hidden;
+	flex-direction: column;
+	justify-content: center;
+	justify-items: center;
+	align-items: center;
 }
+
+
 @keyframes show {
 	from {
 		height: 0;

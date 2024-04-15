@@ -4,6 +4,7 @@ import PetInfoDetail from './PetInfoDetail/PetInfoDetail';
 import  { IPetBook } from '../../interface/iMonster';
 import { MonsterBrief } from '../../interface/iPetBook';
 import {dataContext} from '../../utils/context';
+
 /**
  *
  * 精灵展示卡,包含了精灵的名称,简介信息,身高体重,ID,系别,种族值
@@ -18,7 +19,6 @@ const PetCard = ({id}:{id:number}) => {
 		<div className={styles.pet_card} onClick={() => setOverLay(true)}>
 			<div
 				onClick={(e) => {
-					
 					setOverLay(false);
 					e.stopPropagation();
 				}}
@@ -76,14 +76,15 @@ const PetCard = ({id}:{id:number}) => {
 					</div>
 					<div style={{ marginRight: 8, display: 'flex' }}>
 						<div>
-							<p style={{ fontSize: '.8rem' }}>身高：{monsterBrief.Height}cm</p>
-							<p style={{ fontSize: '.8rem' }}>体重：{monsterBrief.Weight}kg</p>
+							<p style={{ fontSize: '11px' }}>身高：{monsterBrief.Height}cm</p>
+							<p style={{ fontSize: '11px' }}>体重：{monsterBrief.Weight}kg</p>
 						</div>
 					</div>
 				</div>
 				<div className={styles.des}>
 					<p
 						style={{
+							height:51,
 							fontSize: 12,
 							marginRight: 3,
 						}}
