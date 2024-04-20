@@ -2,23 +2,24 @@ import styles from './info.module.css';
 import Power from './power/Power';
 import SkillPanel from '../../SkillPanel/SkillPanel';
 import { useContext, useState } from 'react';
-import { IPetBook, IMonsterBrief, iMonsterDetail } from '../../../interface/iMonster';
+import { iMonsterDetail } from '../../../interface/iMonster';
 import { dataContext } from '../../../utils/context';
 import { iEffectIcon } from '../../../interface/iEffect';
 import { MonsterHead } from '../../MonsterHead/MonsterHead';
 import { IMoveLang } from '../../../interface/iMoveLang';
 import PageSwitcher from '../../PageSwitcher/PageSwitcher';
-
+import { TYPE_MAP } from '../../../utils/commonData';
+import Zks from '../../../assets/扎克斯.png';
 const PetInfoDetail = ({ petID }: { petID: number }) => {
-
 	const [page, setPage] = useState(1);
 	const data = useContext(dataContext);
 	const LangsData: IMoveLang = data.get('movesLang');
 	const Lang = LangsData.root.moves.find((item) => item.id === petID);
+	const Langs = Lang?.lang;
 	const monsterDetail: iMonsterDetail = data.get('monsters').Monsters.Monster.find((item: { ID: number }) => item.ID === petID);
-	const pet_book: IPetBook = data.get('petbook');
-	const monsterBrief = pet_book.root.Monster.find((item: IMonsterBrief) => item.ID === petID) as IMonsterBrief;
-	
+	//const pet_book: IPetBook = data.get('petbook');
+	//const monsterBrief = pet_book.root.Monster.find((item: IMonsterBrief) => item.ID === petID) as IMonsterBrief;
+
 	const HunYin: iEffectIcon = data.get('effectIcon');
 	/**
 	 * @param ExtraMoveID 额外技能,包括特训给的第五技能，活动道具开启的第五技能，神谕给的第五技能
@@ -35,7 +36,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 	//ExtraMoveID ? (num += 1) : null;
 	//console.log(num);
 
-	const AllMoves:any[] = [];
+	const AllMoves: any[] = [];
 	monsterDetail.LearnableMoves.Move.map((item) => AllMoves.push(item));
 	AdvMoves?.map((item) => AllMoves.push(item));
 	ExtraMoveID ? AllMoves.push(ExtraMoveID) : null;
@@ -74,7 +75,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 						lineHeight: '25px',
 					}}
 				>
-					ID:{monsterBrief.ID}
+					ID:{monsterDetail.ID}
 				</div>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					<div
@@ -84,7 +85,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 							left: 5,
 						}}
 					>
-						<MonsterHead id={monsterBrief.ID}></MonsterHead>
+						<MonsterHead id={monsterDetail.ID}></MonsterHead>
 						{/*<img
 							src={`http://seerh5.61.com/resource/assets/pet/head/${monsterBrief.ID}.png`}
 							alt=""
@@ -106,10 +107,10 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 								marginLeft: 10,
 							}}
 						>
-							<div>{monsterBrief.DefName}</div>
+							<div>{monsterDetail.DefName}</div>
 							<div>
-								<img loading='lazy' src={`http://seerh5.61.com/resource/assets/PetType/${monsterDetail.Type}.png`} alt="" width={24} height={24} />
-								{monsterBrief.Type + '系'}
+								<img src={`http://seerh5.61.com/resource/assets/PetType/${monsterDetail.Type}.png`} alt="" width={24} height={24} />
+								{TYPE_MAP.get(monsterDetail.Type) + '系'}
 							</div>
 						</div>
 					</div>
@@ -133,11 +134,11 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 				<div
 					className={styles.effect}
 					//有没有魂印,决定显示与否
-					style={{ display: effect ? 'block' : 'none', marginTop: 18, overflowY: 'scroll', height: '244px' }}
+					style={{ display: effect ? 'block' : 'none', paddingTop: 18, overflowY: 'scroll',height:235 }}
 				>
 					<p style={{ fontSize: 20, color: 'gold' }}>魂印:</p>
 					{effect?.split('；').map((item, index) => (
-						<div  style={{ marginBottom: 5 }} key={index}>
+						<div style={{ marginBottom: 5 }} key={index}>
 							<span style={{ color: 'turquoise' }}>效果{index + 1}：</span>
 							{item}
 						</div>
@@ -147,22 +148,28 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 					<div
 						className={styles.effect}
 						//有没有场景喊话,决定显示与否
-						style={{ display: Lang ? 'block' : 'none', marginTop: 18, overflowY: 'scroll', height: '244px' }}
+						style={{ display: Lang ? 'block' : 'none', paddingTop: 18, overflowY: 'scroll',height:235 }}
 					>
 						<p style={{ fontSize: 20, color: 'gold' }}>场景喊话:</p>
-						{Lang.lang.map((item, index) => (
+						{/**@ts-ignore*/}
+						{Langs?.length?Lang.lang.map((item, index) => (
 							<ul key={index}>
 								<li style={{ marginBottom: 10 }}>{index + 1 + '：' + item._text}</li>
 							</ul>
-						))}
+							/**@ts-ignore */
+						)):<ul><li style={{ marginBottom: 10 }}>1：{Langs._text}</li></ul>}
 					</div>
 				) : null}
 			</div>
 
 			<div className={styles.right}>
-				{AllMoves.slice((page -1)*25,page*25).map((item) => <SkillPanel key={item.ID} moveID={item.ID} learningLv={item.LearningLv? item.LearningLv : 0}></SkillPanel>)}
-				
-				<div style={{position: 'absolute', bottom: 10,right:'20%'}}><PageSwitcher onePageNum={25} page={page} setPage={setPage} total={AllMoves.length}></PageSwitcher></div>
+				{AllMoves.slice((page - 1) * 25, page * 25).map((item) => (
+					<SkillPanel key={item.ID} moveID={item.ID} learningLv={item.LearningLv ? item.LearningLv : 0}></SkillPanel>
+				))}
+
+				<div style={{ position: 'absolute', bottom: 10, right: '20%' }}>
+					<PageSwitcher onePageNum={25} page={page} setPage={setPage} total={AllMoves.length}></PageSwitcher>
+				</div>
 				{/*{monsterDetail.LearnableMoves.Move.map((item) => (
 					<SkillPanel key={item.ID} moveID={item.ID} learningLv={item.LearningLv}></SkillPanel>
 				))}

@@ -49,7 +49,7 @@ function App() {
 				{progress.index != 20 ? (
 					<Loading width={progress.index * 20} item={PROGRESS_MAP.get(progress.item) as string}></Loading>
 				) : (
-						<div style={{ display: 'flex', flexDirection: 'row', height: '100vh', width: '100vw' }}>
+						<div style={{ display: 'flex', flexDirection: 'row', height: '100vh', width: '100vw'}}>
 						<BrowserRouter>
 							<Nav></Nav>
 							<Routes>

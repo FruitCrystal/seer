@@ -104,7 +104,7 @@ export interface iMonsterDetail{
 		/**
 		 * @param Type 精灵属性中文
 		 */
-		Type:string
+		Type:number
 }
 
 /**

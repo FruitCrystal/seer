@@ -4,6 +4,7 @@ import PetInfoDetail from './PetInfoDetail/PetInfoDetail';
 import  { IPetBook } from '../../interface/iMonster';
 import { MonsterBrief } from '../../interface/iPetBook';
 import {dataContext} from '../../utils/context';
+import {TYPE_MAP} from '../../utils/commonData';
 
 /**
  *
@@ -15,6 +16,7 @@ const PetCard = ({id}:{id:number}) => {
 	const monsterDetail = data.get('monsters').Monsters.Monster.find((item: {ID: number;}) => item.ID === id);
 	const pet_book:IPetBook = data.get('petbook')
 	const monsterBrief = pet_book.root.Monster.find((item: MonsterBrief) => item.ID === id) as MonsterBrief;
+
 	return (
 		<div className={styles.pet_card} onClick={() => setOverLay(true)}>
 			<div
@@ -40,6 +42,8 @@ const PetCard = ({id}:{id:number}) => {
 			</div>
 			<div>
 				<img
+				/**@ts-ignore */
+					onError={(e) => {e.target.src = 'https://seerh5.61.com/resource/assets/pet/head/1.png'}}
 					src={`http://seerh5.61.com/resource/assets/pet/head/${monsterDetail.ID}.png`}
 					alt=""
 					height={65}
@@ -51,7 +55,7 @@ const PetCard = ({id}:{id:number}) => {
 				<div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
 					<div className={styles.name}>
 						<div className={styles.fullname} style={{ display: 'none', position: 'absolute' }}>
-							{monsterDetail.DefName}
+							<li>{monsterDetail.DefName}</li>
 						</div>
 						<p
 							style={{
@@ -70,15 +74,18 @@ const PetCard = ({id}:{id:number}) => {
 							<img src={`http://seerh5.61.com/resource/assets/PetType/${monsterDetail.Type}.png`} alt="" width={24} height={24}></img>
 						</div>
 						<div>
-							<p style={{ fontSize: '.7rem' }}>ID：{monsterBrief.ID}</p>
-							<p style={{ fontSize: '0.7rem' }}>{monsterBrief.Type}系</p>
+							<p style={{ fontSize: '.7rem' }}>ID：{monsterDetail.ID}</p>
+							<p style={{ fontSize: '0.7rem' }}>{TYPE_MAP.get(monsterDetail.Type)}系</p>
 						</div>
 					</div>
 					<div style={{ marginRight: 8, display: 'flex' }}>
-						<div>
+						{monsterBrief?<div>
 							<p style={{ fontSize: '11px' }}>身高：{monsterBrief.Height}cm</p>
 							<p style={{ fontSize: '11px' }}>体重：{monsterBrief.Weight}kg</p>
-						</div>
+						</div>:<div>
+							<p style={{ fontSize: '11px' }}>身高：暂无信息</p>
+							<p style={{ fontSize: '11px' }}>体重：暂无信息</p>
+						</div>}
 					</div>
 				</div>
 				<div className={styles.des}>
@@ -89,7 +96,7 @@ const PetCard = ({id}:{id:number}) => {
 							marginRight: 3,
 						}}
 					>
-						{monsterBrief.Features}
+						{monsterBrief? monsterBrief.Features :"暂无信息"}
 					</p>
 				</div>
 				<div style={{ fontSize: 12 }} />

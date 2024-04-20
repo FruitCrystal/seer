@@ -1,12 +1,11 @@
 export interface IMoveLang {
 	root:{
-		moves:[
+		moves:
 			{
 				lang:{
 					_text:string
-				}[],
+				}[]|{_text:string},
 				id:number
-			}
-		]
+			}[]
 	}
 }

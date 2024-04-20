@@ -3,7 +3,8 @@ export const MonsterHead = ({ id }: { id: number}) => {
 	return (
 		<div className={styles.head}>
 			<a>
-				<img className={styles.headimg} src={`https://seerh5.61.com/resource/assets/pet/head/${id}.png`}></img>
+				{/* @ts-ignore */}
+				<img onError={(e) => {e.target.src = 'https://seerh5.61.com/resource/assets/pet/head/1.png'}} className={styles.headimg} src={`https://seerh5.61.com/resource/assets/pet/head/${id}.png`}></img>
 				{/*<p style={{ position: 'relative', bottom: '0px', backgroundColor: '#00000080', color: 'white', width: '89px', left: '8px' }}>
 					{name}
 				</p>*/}

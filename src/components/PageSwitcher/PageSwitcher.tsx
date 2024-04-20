@@ -1,3 +1,4 @@
+import styles from './PageSwitcher.module.css';
 const PageSwitcher = ({ page, setPage, total, onePageNum }: { page: number; setPage: Function; total: number; onePageNum: number }) => {
 	return (
 		<div>
@@ -9,7 +10,7 @@ const PageSwitcher = ({ page, setPage, total, onePageNum }: { page: number; setP
 					上一页
 				</button>
 				<span className="page-info">
-					第{page}页/共{Math.ceil(total / onePageNum)}页
+					第<input className={styles.inputPage} type="number" max={Math.ceil(total / onePageNum)} min={1} value={page} onChange={(e) => setPage(Number(e.target.value))} />页/共{Math.ceil(total / onePageNum)}页
 				</span>
 				<button
 					{...{ disabled: page === Math.ceil(total / onePageNum) }}

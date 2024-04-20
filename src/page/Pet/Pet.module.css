@@ -1,0 +1,16 @@
+.searchInput{
+	width: 200px;
+	height: 30px;
+}
+.searchInput::placeholder{
+	font-size:12px;
+	font-family: 'seerFont';
+}
+.search_bar>*{
+	margin: 0 8px;
+}
+fieldset{
+	display: flex;
+	flex-direction: column;
+	
+}

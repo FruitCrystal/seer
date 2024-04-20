@@ -42,11 +42,30 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 	 */
 	const EffectArg = typeof move.SideEffectArg === 'string' ? move.SideEffectArg.split(' ') : [move.SideEffectArg as number];
 	const MemogenerateSkillDesPlus = useMemo(generateSkillDesPlus,[moveID])
+	function replaceNumbersWithValues(text:string, values:string[]|number[]) {  
+    // 使用正则表达式找到所有的数字，并替换为数组中的值  
+    // 使用正则表达式找到所有的占位符，格式为 {数字}  
+    const regex = /\{(\d+)\}/g;
+    let match;
+    let result = text;
+    // 遍历所有匹配的占位符
+    while ((match = regex.exec(text)) !== null) {  
+        // 获取占位符中的数字索引  
+        const index = match[1];  
+        // 检查数组的长度是否足够，避免索引越界  
+        if (parseInt(index) < values.length) {  
+            // 替换占位符为数组中的值  
+            result = result.replace(`{${index}}`, values[parseInt(index)]+"");  
+        }  
+    }  
+  
+    return result;  
+}  
 	function generateSkillDesPlus() {
 		let finalResult = ''; //最终结果
-		if(localStorage.getItem(moveID.toString())){
-			return localStorage.getItem(moveID.toString()) as string;
-		}
+		//if(localStorage.getItem(moveID.toString())){
+		//	return localStorage.getItem(moveID.toString()) as string;
+		//}
 		let EffectTypeParam: string = '';
 		type TYPE_SKILL_INFO = {
 			技能ID: number;
@@ -93,8 +112,9 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item != 201,
 			};
 		});
+		console.log(SKILL_INFO);
 		/**
-		 * 逐个描述进行数据对其
+		 * 逐个描述进行数据对齐
 		 */
 		SKILL_INFO.技能描述及参数.forEach((item) => {
 			if (item.效果描述) {
@@ -121,7 +141,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					let desList = item.效果描述?.split('');
 					let length = desList.length;
 					let isAbilityAdvance = item.效果描述.match(/\d/g)?.join('').includes('102');
-					
 					if (item.技能效果ID == 588 || item.技能效果ID == 678) {
 						let abilityID = item.参数[1];
 						//console.log();
@@ -129,7 +148,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 						finalResult += des
 							.replace('{0}', item.参数[0] + '')
 							.replace('{1}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
-							.replace('{2}', item.参数[2] + '');
+							.replace('{2}', item.参数[2] + '')+'。';
 						return;
 					}
 					if (item.技能效果ID == 501) {
@@ -138,7 +157,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 						finalResult += des
 							.replace('{0}', item.参数[0] + '')
 							.replace('{1}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
-							.replace('{2}', item.参数[2] + '');
+							.replace('{2}', item.参数[2] + '')+'。';
 						return;
 					}
 					if (item.技能效果ID == 407) {
@@ -147,7 +166,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 						finalResult += des
 							.replace('{0}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
 							.replace('{1}', item.参数[1] + '')
-							.replace('{2}', item.参数[2] + '');
+							.replace('{2}', item.参数[2] + '')+'。';
 						return;
 					}
 					if (isAbilityAdvance) {
@@ -162,11 +181,12 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 						finalResult += '。';
 						return;
 					} else {
+						console.log(item);
+						//finalResult += replaceNumbersWithValues(item.效果描述, item.参数);
 						for (let i = 0; i < length; i++) {
 							if (desList[i] === '{') {
 								finalResult += '';
-								let index = desList[i + 1];
-								finalResult += item.参数[parseInt(index)];
+								finalResult += item.参数[parseInt(desList[i+1])];
 								i++;
 								i++;
 							} else {
