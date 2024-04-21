@@ -14,3 +14,13 @@ fieldset{
 	flex-direction: column;
 	
 }
+.randomBtn{
+	width: 50%;
+	margin-top: 10px;
+	border: 2px solid #bfbfbf;
+	outline: none;
+}
+.randomBtn:hover{
+	background-color: rgb(232, 230, 230);
+}
+

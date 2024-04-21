@@ -22,16 +22,16 @@ export const Home = () => {
 				<div className={styles.main}>
 					<div className={styles.news}>
 						<h2 style={{width: '100%',textAlign: 'center',backgroundColor:"#bfbfbf"}}>本周更新精灵</h2>
-						<div style={{ display: 'flex' }}>
+						<div style={{ display: 'flex' ,width:'100%'}}>
 							{petBook.root.Hotspot.item.place.map((place) =>
 								place.type == 0 ? <div key={place.ID}  style={{marginRight: 10}}><PetCard id={place.ID}></PetCard></div> : null
 							)}
 						</div>
 						
 				</div>
-				<div style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+				<div style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center',width: '100%'}}>
 						<h2 style={{width: '100%',textAlign: 'center',backgroundColor:"#bfbfbf"}}>本周巅峰竞技池</h2>
-						<div className="pvp_ban" style={{display: 'flex',flexDirection: 'row'}}>
+						<div className="pvp_ban" style={{display: 'flex',flexDirection: 'row',width: '100%'}}>
 							<div className="pvp_ban_first" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
 								<h3 style={{width: '100%',textAlign: 'center',backgroundColor:"#efefef"}}>准限制级</h3>
 								<div className="pvp_ban_first_list" style={{ display: 'flex' ,flexWrap: 'wrap',height:400,width: 370,overflowY: 'scroll'}}>
@@ -40,9 +40,8 @@ export const Home = () => {
 									))}
 								</div>
 							</div>
-							<div className="pvp_ban_second" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}><h3 style={{width: '100%',textAlign: 'center',backgroundColor:"#efefef"}}>限制级</h3>
+							<div className="pvp_ban_second" style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center',width:'100%'}}><h3 style={{width: '100%',textAlign: 'center',backgroundColor:"#efefef"}}>限制级</h3>
 							<div className="pvp_ban_second_list" style={{ display: 'flex' ,flexWrap: 'wrap',height:400,width: 370,overflowY: 'scroll'}}>
-								
 								{pvp_ban.data[1].name.split(';').map((name) => (
 										<PetCard key={name} id={parseInt(name)}></PetCard>
 									))}

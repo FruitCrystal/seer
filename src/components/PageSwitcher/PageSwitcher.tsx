@@ -10,7 +10,7 @@ const PageSwitcher = ({ page, setPage, total, onePageNum }: { page: number; setP
 					上一页
 				</button>
 				<span className="page-info">
-					第<input className={styles.inputPage} type="number" max={Math.ceil(total / onePageNum)} min={1} value={page} onChange={(e) => setPage(Number(e.target.value))} />页/共{Math.ceil(total / onePageNum)}页
+					第<input className={styles.inputPage} type="number" max={Math.ceil(total / onePageNum)} min={1} defaultValue={1} value={page?page:1} onChange={(e) => setPage(Number(e.target.value))} />页/共{Math.ceil(total / onePageNum)}页
 				</span>
 				<button
 					{...{ disabled: page === Math.ceil(total / onePageNum) }}

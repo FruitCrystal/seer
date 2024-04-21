@@ -137,10 +137,9 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 					style={{ display: effect ? 'block' : 'none', paddingTop: 18, overflowY: 'scroll',height:235 }}
 				>
 					<p style={{ fontSize: 20, color: 'gold' }}>魂印:</p>
-					{effect?.split('；').map((item, index) => (
+					{effect?.split('|').map((item, index) => (
 						<div style={{ marginBottom: 5 }} key={index}>
-							<span style={{ color: 'turquoise' }}>效果{index + 1}：</span>
-							{item}
+							&nbsp;&nbsp;{item}
 						</div>
 					))}
 				</div>
