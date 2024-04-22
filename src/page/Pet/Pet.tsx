@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import iMonster, { IMonsterBrief, IPetBook, iMonsterDetail } from '../../interface/iMonster';
+import iMonster, {  iMonsterDetail } from '../../interface/iMonster';
 import PetCard from '../../components/Card/PetCard';
 import { dataContext } from '../../utils/context';
-import { FilterContextProps, filterContext } from './../../utils/filterContext';
+import { FilterContextProps } from './../../utils/filterContext';
 import style from './Pet.module.css';
 import {TYPE_MAP} from '../../utils/commonData';
 import PageSwitcher from '../../components/PageSwitcher/PageSwitcher';
 import {getSomeRandomPetID} from '../../utils/tools';
 export const Pet = () => {
-	const _filter = useContext(filterContext);
 	const data = useContext(dataContext);
 	const monstersData:iMonster = data.get('monsters');
 	const monsters:iMonsterDetail[]= monstersData.Monsters.Monster.filter(e=>e.ID<=5000);

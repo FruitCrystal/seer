@@ -7,6 +7,9 @@ import { dataContext } from './utils/context';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Pet } from './page/Pet/Pet';
 import Nav from './components/Nav/Nav';
+import {Item} from './page/Item/Item';
+import {Skill} from './page/Skill/Skill';
+import {Counter} from './page/Counter/Counter';
 
 function App() {
 	const [data, setData] = useState(
@@ -53,8 +56,11 @@ function App() {
 						<BrowserRouter>
 							<Nav></Nav>
 							<Routes>
-									<Route path="/" element={<Home></Home>}></Route>
+									<Route path="/home" element={<Home></Home>}></Route>
 									<Route path="/pet" element={<Pet></Pet>}></Route>
+									<Route path="/item" element={<Item></Item>}></Route>
+									<Route path={`/skill/:id?`} element={<Skill></Skill>}></Route>
+									<Route path="/counter" element={<Counter></Counter>}></Route>
 							</Routes>
 						</BrowserRouter>
 					</div>

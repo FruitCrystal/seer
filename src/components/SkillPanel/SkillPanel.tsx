@@ -1,8 +1,10 @@
+import {Link} from 'react-router-dom';
 import { DescriptionMapping } from '../../interface/iData';
 import { iEffectInfo } from '../../interface/iEffect';
 import { MoveDetail, iMove } from '../../interface/iMove';
 import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
+import refresh from '../../assets/refresh.svg'
 import { useContext, useMemo } from 'react';
 const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: number; extraMoveID?: (number | undefined)[] }) => {
 	const data = useContext(dataContext);
@@ -94,7 +96,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				参数: EffectArg?.splice(0, skill?.argsNum),
 				技能效果ID: item,
 				该描述所需参数数量: skill?.argsNum,
-				特殊描述标记: (skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item != 201,
+				特殊描述标记: skill?.info?(skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item != 201: false,
 			};
 		});
 		//console.log(SKILL_INFO);
@@ -158,11 +160,31 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 							finalResult = finalResult.replace('则令1', '则令对手');
 						}
 					}
-				} else {
+				} else {//处理没有特殊标记的技能
 					//let desList = item.效果描述?.split('');
 					//let length = item.效果描述?.length;
 					//console.log(item.效果描述.length===desList.length);
 					let isAbilityAdvance = item.效果描述.match(/\d/g)?.join('').includes('102');
+					if(item.技能效果ID==492){
+						let des = item.效果描述;
+						finalResult +=
+							des
+								.replace('{0}', item.参数[0] + '')
+								.replace('{1}', item.参数[1] + '')
+								.replace('{2}', DescriptionMapping.AbilityMapping[parseInt(item.参数[2] as string)])
+								.replace('{3}', item.参数[3] + '')
+								.replace('{4}', DescriptionMapping.AbilityMapping[parseInt(item.参数[4] as string)])
+								.replace('{5}', item.参数[5] + '')+'。'
+								return;
+					}
+					if(item.技能效果ID==493){
+						let des = item.效果描述;
+						finalResult +=
+							des
+								.replace('{0}', item.参数[0] + '')
+								.replace('{1}', '1')
+							return;
+					}
 					if (item.技能效果ID == 588 || item.技能效果ID == 678) {
 						let abilityID = item.参数[1];
 						let des = item.效果描述;
@@ -171,6 +193,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 								.replace('{0}', item.参数[0] + '')
 								.replace('{1}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
 								.replace('{2}', item.参数[2] + '') + '。';
+								return;
 					}
 					if (item.技能效果ID == 501) {
 						let abilityID = item.参数[1];
@@ -180,6 +203,15 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 								.replace('{0}', item.参数[0] + '')
 								.replace('{1}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
 								.replace('{2}', item.参数[2] + '') + '。';
+								return;
+					}
+					if(item.技能效果ID == 631){
+						let des = item.效果描述;
+						finalResult +=
+							des
+								.replace('{0}', item.参数[0]==0?"对手能力提升":"自身能力提升")
+								.replace('{1}', item.参数[1] + '')+'。';
+								return;
 					}
 					if (item.技能效果ID == 407) {
 						let abilityID = item.参数[0]; //能力提升效果的id:0=攻击/1=特攻
@@ -189,6 +221,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 								.replace('{0}', DescriptionMapping.AbilityMapping[parseInt(abilityID as string)])
 								.replace('{1}', item.参数[1] + '')
 								.replace('{2}', item.参数[2] + '') + '。';
+								return;
 					}
 					if (isAbilityAdvance) {
 						let abilityID = item.参数[0];
@@ -271,9 +304,16 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				</p>
 			</div>
 			<div id="desc" className={styles.desc}>
+				<div>
+					<div style={{position:'absolute',right:0,top:0,padding:5,cursor:'pointer'}}>
+						<img src={refresh} width={25}></img>
+					</div>
+					<div style={{ display: 'none' }}>技能持有者：</div>
+				</div>
+				
 				<div style={{ fontSize: 10 ,color: 'rgb(165,220,255)' }}>
 					<p>技能ID：{move.ID}</p>
-					{move.SideEffect?<p>技能效果代码：[{move.SideEffect}]</p>:null}
+					效果ID:{move.SideEffect?move.SideEffect.toString().split(' ').map((item, index) => <Link to={`/skill/${item}`} className={styles.effectID} key={index}>{item}</Link>):'无'}
 				</div>
 				<h3
 					//三目运算符匹配三个条件以上

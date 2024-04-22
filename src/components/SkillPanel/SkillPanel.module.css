@@ -69,3 +69,8 @@
 	height: auto;
 	z-index: 1000000000000;
 }
+.effectID{
+	color: #fb9cfe;
+	margin-left: 3px;
+	text-decoration: underline;
+}
