@@ -9,7 +9,6 @@ import { MonsterHead } from '../../MonsterHead/MonsterHead';
 import { IMoveLang } from '../../../interface/iMoveLang';
 import PageSwitcher from '../../PageSwitcher/PageSwitcher';
 import { TYPE_MAP } from '../../../utils/commonData';
-import Zks from '../../../assets/扎克斯.png';
 const PetInfoDetail = ({ petID }: { petID: number }) => {
 	const [page, setPage] = useState(1);
 	const data = useContext(dataContext);
@@ -28,6 +27,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 	const ExtraMoveID = monsterDetail.ExtraMove;
 	const spExtraMoveID = monsterDetail.SpExtraMoves;
 	const AdvMoves = monsterDetail.LearnableMoves.AdvMove;
+	const spMove = monsterDetail.LearnableMoves.SpMove;
 	//let num = 0;
 	//num += monsterDetail.LearnableMoves.Move.length;
 	//AdvMoves?.length ? (num += AdvMoves.length) : null;
@@ -37,12 +37,12 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 	//console.log(num);
 
 	const AllMoves: any[] = [];
-	monsterDetail.LearnableMoves.Move.map((item) => AllMoves.push(item));
-	AdvMoves?.map((item) => AllMoves.push(item));
-	ExtraMoveID ? AllMoves.push(ExtraMoveID) : null;
-	spExtraMoveID ? AllMoves.push(spExtraMoveID.Move) : null;
-	ExtraMovesID ? AllMoves.push(ExtraMovesID.Move) : null;
-	//console.log(AllMoves);
+	monsterDetail.LearnableMoves.Move.map((item) => AllMoves.push({move:item,mark:0}));
+	AdvMoves?.map((item) => AllMoves.push({move:item,mark:2}));
+	ExtraMoveID ? AllMoves.push({move:ExtraMoveID,mark:2}) : null;
+	spExtraMoveID ? AllMoves.push({move:spExtraMoveID.Move,mark:1}) : null;
+	ExtraMovesID ? AllMoves.push({move:ExtraMovesID.Move,mark:1}) : null;
+	spMove? AllMoves.push({move:spMove[0],mark:2}) : null;
 	/**
 	 * @param effect 魂印效果的文字描述
 	 */
@@ -162,8 +162,11 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 			</div>
 
 			<div className={styles.right}>
-				{AllMoves.slice((page - 1) * 25, page * 25).map((item) => (
-					<SkillPanel key={item.ID} moveID={item.ID} learningLv={item.LearningLv ? item.LearningLv : 0}></SkillPanel>
+				{AllMoves.slice((page - 1) * 25, page * 25).map((item,index) => (
+					<div style={{position: 'relative'}}>
+						{item.mark==1?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>第五技能</p>:item.mark==2?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>追加技能</p>:null}
+						<SkillPanel key={index} moveID={item.move.ID? item.move.ID : 10001} learningLv={item.move.LearningLv ? item.LearningLv : 0}></SkillPanel>
+					</div>
 				))}
 
 				<div style={{ position: 'absolute', bottom: 10, right: '20%' }}>

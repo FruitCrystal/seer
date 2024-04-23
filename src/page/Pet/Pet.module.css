@@ -24,3 +24,6 @@ fieldset{
 	background-color: rgb(232, 230, 230);
 }
 
+.tipsItem:hover{
+	background-color: rgb(195, 195, 195);
+}

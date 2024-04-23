@@ -12,6 +12,7 @@ import {Skill} from './page/Skill/Skill';
 import {Counter} from './page/Counter/Counter';
 
 function App() {
+	const length = PROGRESS_MAP.size;
 	const [data, setData] = useState(
 		new Map<
 			| 'version'
@@ -49,8 +50,8 @@ function App() {
 	return (
 		<div>
 			<dataContext.Provider value={data}>
-				{progress.index != 20 ? (
-					<Loading width={progress.index * 20} item={PROGRESS_MAP.get(progress.item) as string}></Loading>
+				{progress.index != length-1 ? (
+					<Loading width={progress.index * length} item={PROGRESS_MAP.get(progress.item) as string}></Loading>
 				) : (
 						<div style={{ display: 'flex', flexDirection: 'row', height: '100vh', width: '100vw'}}>
 						<BrowserRouter>

@@ -17,9 +17,13 @@ export let PROGRESS_MAP: Map<string, string> = new Map([
 	['ogre', '宝石'],
 	['movesLang', '精灵喊话'],
 	['bossEffectIcon', 'BOSS特效'],
-	['pvp_ban', 'pvp限制池']
+	['pvp_ban', 'pvp限制池'],
+	['mintmark','刻印'],
+	['peak_battle_mons','巅峰主场'],
+	['signIcon_fight','战斗标记类描述'],
+	['sp_hide_moves','精灵追加技能']
 ]);
-export type TData = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon']
+export type TData = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','mintmark','peak_battle_mons']
 /**
  * 
  * 	初始化数据,获取版本号,精灵,道具,魂印,技能数据
@@ -33,7 +37,7 @@ export async function init(setProgress: Function) {
 	const json = resource.files.resource.config.json;
 	data.set('version', version)
 	//console.log(resource)
-	const essential = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','pvp_ban']
+	const essential = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','pvp_ban','mintmark','peak_battle_mons']
 	let index = 1;
 	for (const item of essential) {
 			if(item==='pvp_ban'){

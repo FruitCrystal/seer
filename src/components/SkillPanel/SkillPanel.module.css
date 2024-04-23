@@ -36,6 +36,7 @@
 	/*filter: drop-shadow(16px 16px 20px red);*/
 	width: 143px;
 	height:60px;
+	
 	background-image: linear-gradient(145deg,rgb(17, 142, 221), rgb(2,102,184));
 	display: flex;
 	margin: 5px;
@@ -73,4 +74,8 @@
 	color: #fb9cfe;
 	margin-left: 3px;
 	text-decoration: underline;
+}
+.refresh:hover{
+	filter: drop-shadow(5px 5px 5px #ffffff);
+	scale: 1.01;
 }

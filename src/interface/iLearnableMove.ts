@@ -3,5 +3,10 @@ export default interface iLearnableMove{
 	Move: {
 		ID: number;
 		LearningLv: number;
-	}[];
+	}[],
+	SpMove:{
+		ID:number,
+		Rec:number,
+		Tag:number
+	}[]
 }

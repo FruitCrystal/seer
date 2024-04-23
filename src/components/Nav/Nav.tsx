@@ -22,7 +22,7 @@ const Nav = () => {
 	return (
 		<ul className={styles.nav}>
 			
-			<Link to='/' onClick={()=>setUrl('/home')}>
+			<Link to='/home' onClick={()=>setUrl('/home')}>
 				<li title="首页" style={changeBGC('/home')}>
 					<img src={pony} width={'40px'} height={'40px'}></img>
 					首页
@@ -51,6 +51,12 @@ const Nav = () => {
 				<li title="刻印" style={changeBGC('/skill')}>
 					<img src={skill_stone} width={'40px'} height={'40px'}></img>
 					技能
+				</li>
+			</Link>
+			<Link to={'/equip'} id='equip' onClick={()=>setUrl('/equip')}>
+				<li title="刻印" style={changeBGC('/equip')}>
+					<img src={skill_stone} width={'40px'} height={'40px'}></img>
+					装备
 				</li>
 			</Link>
 		</ul>

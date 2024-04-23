@@ -4,7 +4,6 @@ import { iEffectInfo } from '../../interface/iEffect';
 import { MoveDetail, iMove } from '../../interface/iMove';
 import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
-import refresh from '../../assets/refresh.svg'
 import { useContext, useMemo } from 'react';
 const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: number; extraMoveID?: (number | undefined)[] }) => {
 	const data = useContext(dataContext);
@@ -304,13 +303,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				</p>
 			</div>
 			<div id="desc" className={styles.desc}>
-				<div>
-					<div style={{position:'absolute',right:0,top:0,padding:5,cursor:'pointer'}}>
-						<img src={refresh} width={25}></img>
-					</div>
-					<div style={{ display: 'none' }}>技能持有者：</div>
-				</div>
-				
 				<div style={{ fontSize: 10 ,color: 'rgb(165,220,255)' }}>
 					<p>技能ID：{move.ID}</p>
 					效果ID:{move.SideEffect?move.SideEffect.toString().split(' ').map((item, index) => <Link to={`/skill/${item}`} className={styles.effectID} key={index}>{item}</Link>):'无'}
