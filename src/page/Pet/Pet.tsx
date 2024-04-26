@@ -8,6 +8,8 @@ import { TYPE_MAP } from '../../utils/commonData';
 import PageSwitcher from '../../components/PageSwitcher/PageSwitcher';
 import { getSomeRandomPetID } from '../../utils/tools';
 import { MoveDetail, iMove } from '../../interface/iMove';
+import {Link} from 'react-router-dom';
+import { TypeSwitcher } from './../../components/TypeSwitcher/TypeSwitcher';
 export const Pet = () => {
 	const data = useContext(dataContext);
 	const monstersData: iMonster = data.get('monsters');
@@ -23,6 +25,9 @@ export const Pet = () => {
 	const [TipsVisible, setTipsVisible] = useState(false);
 	const [searchingSkillName, setSearchingSkillName] = useState('');
 	const [Tips, setTips] = useState<Array<string>>([]);
+	function setType(type: number) {
+		setFilter({ ...filter, type });
+	}
 	useEffect(() => {
 		setTips(movesNameList.filter((item) => (item + '').includes(searchingSkillName)));
 	}, [searchingSkillName]);
@@ -112,15 +117,16 @@ export const Pet = () => {
 				</label>
 				<fieldset>
 					<legend>属性</legend>
-					<select onChange={(e) => setFilter({ ...filter, type: parseInt(e.currentTarget.value) })} value={filter.type}>
+					{/*<select onChange={(e) => setFilter({ ...filter, type: parseInt(e.currentTarget.value) })} value={filter.type}>
 						{Array.from(TYPE_MAP.keys()).map((key) => (
 							<option value={key} key={key}>
 								{TYPE_MAP.get(key)}
 							</option>
 						))}
-					</select>
-					<div>
-						<img src={`http://seerh5.61.com/resource/assets/PetType/${filter.type}.png`} alt="" />
+					</select>*/}
+					<div style={{width:55}}>
+							<TypeSwitcher _type={filter.type} _setType={setType}></TypeSwitcher>
+						{/*<img src={`http://seerh5.61.com/resource/assets/PetType/${filter.type}.png`} alt="" />*/}
 					</div>
 				</fieldset>
 				<fieldset>
@@ -228,6 +234,7 @@ export const Pet = () => {
 				</fieldset>
 				<fieldset style={{ width: '230px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 					<legend>根据技能查询</legend>
+					<Link title='点我查找技能ID' style={{position: 'relative', top: 20, right: -95}} to='/skill'>?</Link>
 					<input
 						onKeyDown={(e) => {
 							if (e.code === 'Enter') {

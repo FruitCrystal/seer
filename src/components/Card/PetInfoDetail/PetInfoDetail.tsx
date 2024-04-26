@@ -18,7 +18,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 	const monsterDetail: iMonsterDetail = data.get('monsters').Monsters.Monster.find((item: { ID: number }) => item.ID === petID);
 	//const pet_book: IPetBook = data.get('petbook');
 	//const monsterBrief = pet_book.root.Monster.find((item: IMonsterBrief) => item.ID === petID) as IMonsterBrief;
-
+	console.log(monsterDetail);
 	const HunYin: iEffectIcon = data.get('effectIcon');
 	/**
 	 * @param ExtraMoveID 额外技能,包括特训给的第五技能，活动道具开启的第五技能，神谕给的第五技能
@@ -165,7 +165,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 				{AllMoves.slice((page - 1) * 25, page * 25).map((item,index) => (
 					<div style={{position: 'relative'}}>
 						{item.mark==1?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>第五技能</p>:item.mark==2?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>追加技能</p>:null}
-						<SkillPanel key={index} moveID={item.move.ID? item.move.ID : 10001} learningLv={item.move.LearningLv ? item.LearningLv : 0}></SkillPanel>
+						<SkillPanel key={index} moveID={item.move.ID? item.move.ID : 10001} learningLv={item.move.LearningLv ? item.move.LearningLv : 0}></SkillPanel>
 					</div>
 				))}
 

@@ -6,6 +6,7 @@ import counter_mark from '../../assets/countermark.png';
 import skill_stone from '../../assets/skill_stone.png'
 import { Link,  useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
+import equip from '../../assets/equip.png'
 const Nav = () => {
 
 	const href = useLocation()
@@ -48,14 +49,14 @@ const Nav = () => {
 				</li>
 			</Link>
 			<Link to={'/skill'} id='skill' onClick={()=>setUrl('/skill')}>
-				<li title="刻印" style={changeBGC('/skill')}>
+				<li title="技能" style={changeBGC('/skill')}>
 					<img src={skill_stone} width={'40px'} height={'40px'}></img>
 					技能
 				</li>
 			</Link>
 			<Link to={'/equip'} id='equip' onClick={()=>setUrl('/equip')}>
-				<li title="刻印" style={changeBGC('/equip')}>
-					<img src={skill_stone} width={'40px'} height={'40px'}></img>
+				<li title="装备" style={changeBGC('/equip')}>
+					<img src={equip} width={'40px'} height={'40px'}></img>
 					装备
 				</li>
 			</Link>

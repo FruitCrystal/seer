@@ -39,9 +39,9 @@
 	
 	background-image: linear-gradient(145deg,rgb(17, 142, 221), rgb(2,102,184));
 	display: flex;
-	margin: 5px;
-	padding-top: 5px;
-	justify-content: space-around;
+	margin: 5px 3px 5px 2px;
+	padding: 5px 6px 0 6px;
+	justify-content: space-between;
 	flex-direction: row-reverse;
 	border-radius: 3px;
 	position: relative;

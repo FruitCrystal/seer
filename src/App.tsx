@@ -57,6 +57,7 @@ function App() {
 						<BrowserRouter>
 							<Nav></Nav>
 							<Routes>
+									<Route path="/" element={<Home></Home>}></Route>
 									<Route path="/home" element={<Home></Home>}></Route>
 									<Route path="/pet" element={<Pet></Pet>}></Route>
 									<Route path="/item" element={<Item></Item>}></Route>

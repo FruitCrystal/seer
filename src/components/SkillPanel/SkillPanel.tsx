@@ -318,8 +318,8 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				</h4>
 				{move.MustHit == 1 ? <p style={{ fontSize: 18, color: 'rgb(100,225,249)' }}>必中</p> : null}
 				<div>学习等级:{learningLv}</div>
-				<div style={{ display: move.MustHit == 1 ? 'none' : 'block' }}>精准度:{move.Accuracy}</div>
-				<div style={{ display: move.Category == 4 && move.ID >= 20000 ? 'none' : 'block' }}>
+				<div style={{ display: move.MustHit == 1 ? 'none' : 'block',color:'goldenrod'}}>精准度:{move.Accuracy}</div>
+				<div style={{ display: move.Category == 4 && move.ID >= 20000 ? 'none' : 'block' ,color: 'red' }}>
 					暴击率:{typeof move.CritRate === 'undefined' ? '1' : move.CritRate}/16
 				</div>
 				<div style={{ color: 'rgb(183,178,178)' }}>{move.info}</div>
