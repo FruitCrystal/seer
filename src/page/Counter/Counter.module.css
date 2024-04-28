@@ -1,0 +1,8 @@
+.counterMark:hover{
+	scale: 1.05;
+	box-shadow: 0px 0px 5px #7e7e7ea0;
+}
+.counterMark{
+	box-shadow: 0px 0px 5px #00000030;
+
+}
