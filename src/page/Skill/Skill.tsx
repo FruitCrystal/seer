@@ -8,16 +8,15 @@ import styles from './Skill.module.css';
 import change from '../../assets/refresh.svg';
 import {TypeSwitcher} from '../../components/TypeSwitcher/TypeSwitcher';
 export const Skill = () => {
-	const searchIDInput = useRef<HTMLInputElement>(null);
 	const PARAMS = useParams();
 	const [page, setPage] = useState(1);
-	const [searchID, setSearchID] = useState<string | undefined>(undefined);
+	const [searchID, setSearchID] = useState<string | undefined>(PARAMS.id);
 	const [effectID, setEffectID] = useState(PARAMS.id);
 	const database = useContext(dataContext);
 	const MOVES: iMove = database.get('moves');
 	const moves_List: MoveDetail[] = MOVES.MovesTbl.Moves.Move;
 	const [moves_after_filter, setMoves_after_filter] = useState<MoveDetail[]>([]);
-	const [search_way, setSearch_way] = useState(true); //true为搜索技能ID，false为搜索效果ID
+	const [search_way, setSearch_way] = useState(!PARAMS.id? true : false); //true为搜索技能ID，false为搜索效果ID
 	const [type, setType] = useState(0);
 	useEffect(() => {
 		//由于Params.id是不可变的，所以从技能效果ID跳转到技能页面时，只需要设置一次
@@ -32,7 +31,7 @@ export const Skill = () => {
 			  )
 			: setMoves_after_filter(moves_List);
 			setType(0);
-	}, [JSON.stringify(PARAMS)]);
+	}, [PARAMS.id]);
 
 	function doSearch(param: string) {
 		if (search_way) {
@@ -49,7 +48,7 @@ export const Skill = () => {
 		if (type){
 			setMoves_after_filter(moves_List.filter((move) => move.Type == type));
 		}else{
-			setMoves_after_filter(moves_List);
+			setMoves_after_filter(moves_List.filter((move) => move.SideEffect?.toString().split(' ').includes(PARAMS.id as string)));
 		}
 		setPage(1);},[type])
 	return (
@@ -62,7 +61,6 @@ export const Skill = () => {
 						<label>
 							技能ID：
 							<input
-								ref={searchIDInput}
 								id="searchID"
 								type="text"
 								value={searchID}

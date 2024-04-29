@@ -86,6 +86,9 @@ export interface ParamType{
 	params: string;
 	desc: string;
 }
+/**
+ * 技能
+ */
 export interface Effect{
 	id: number;
 	argsNum: number;

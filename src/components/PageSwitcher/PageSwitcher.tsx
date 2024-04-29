@@ -2,7 +2,7 @@ import styles from './PageSwitcher.module.css';
 const PageSwitcher = ({ page, setPage, total, onePageNum }: { page: number; setPage: Function; total: number; onePageNum: number }) => {
 	return (
 		<div>
-			<div className="page-switcher">
+			<div className="page-switcher" style={{minWidth: '467px', display: 'flex', justifyContent: 'center',margin:"0 auto"}}>
 				<button {...{ disabled: page === 1 }} className={page === 1 ? 'page-btn disabled' : 'page-btn'} onClick={() => setPage(1)}>
 					首页
 				</button>

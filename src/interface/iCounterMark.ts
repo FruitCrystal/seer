@@ -18,7 +18,7 @@ export interface iMintMark{
 	 * @param EffectDes 即为刻印的数值具体描述，如"体力8/80,特攻6/60,防御2/28,特防2/28,速度2/25"
 	 */
 	EffectDes?:string,
-	Arg?:string,
+	Arg?:string|number,
 	Level:number,
 	/**
 	 * 刻印名字
@@ -48,11 +48,11 @@ export interface iMintMark{
 	/**
 	 * @param MonsterID 刻印所属精灵ID
 	 */
-	MonsterID?:number,
+	MonsterID?:number|string,
 	/**
 	 * 全能刻印系列
 	 */
-	MintMarkClass?:number,
+	MintmarkClass?:number,
 }
 export interface iMintmarkClass{
 	/**
@@ -70,7 +70,8 @@ export interface iMintmarkClass{
 export default interface iCounterMark{
 	
 	MintMarks:{
-		MintMark:iMintMark[]
+		MintMark:iMintMark[],
+		MintmarkClass:iMintmarkClass[]
 	}
-	MintmarkClass:iMintmarkClass[]
+	
 }

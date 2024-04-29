@@ -59,7 +59,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 				height: '75%',
 				backgroundColor: '#fff',
 				display: 'grid',
-				gridTemplateColumns: '220px 790px',
+				gridTemplateColumns: '220px 800px',
 				position: 'relative',
 				gridTemplateRows: '1fr',
 				left: '8%',

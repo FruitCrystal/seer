@@ -29,16 +29,15 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 	 * @param move 根据props传来的技能ID，获取到该技能的详细的数据
 	 */
 	const move: MoveDetail = movesData.MovesTbl.Moves.Move.find((item: MoveDetail) => item.ID === moveID) as MoveDetail;
-
 	/**
 	 * @param moveEffect 从数据库中获取的技能效果数据
 	 */
-	const moveEffect: iEffectInfo = data.get('effectInfo');
-
+	let moveEffect: iEffectInfo = data.get('effectInfo');
+	moveEffect.root.Effect.push({id: 31, info: '1回合做{0}~{1}次攻击。', argsNum: 2})
 	/**
 	 * @param EffectID 单个技能所持有的效果ID
 	 */
-	const EffectID = typeof move.SideEffect === 'string' ? move.SideEffect.split(' ') : [move.SideEffect];
+	const EffectID = typeof move.SideEffect === 'string' ? move.SideEffect.split(' ').map(Number) : [move.SideEffect];
 	//console.log(move);
 	//const EffectTypeParam = moveEffect.root.Effect.find((item) => item.id === EffectID[0])?.param;
 	/**
@@ -83,13 +82,13 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				},
 			],
 		};
-		//console.log(SKILL_INFO);
 		/**
 		 *根据技能效果ID，从effectInfo中获取技能效果描述，并将其添加到SKILL_INFO的技能描述列表中
 		 */
 		EffectID.forEach((item, index) => {
 			let skill = moveEffect.root.Effect.find((i) => i.id == item);
 			EffectTypeParam += skill?.param ? skill.param : '';
+			console.log(EffectTypeParam);
 			SKILL_INFO.技能描述及参数[index] = {
 				效果描述: skill?.info,
 				参数: EffectArg?.splice(0, skill?.argsNum),
@@ -98,11 +97,16 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				特殊描述标记: skill?.info?(skill?.info.match(/{/g)?.length as number) < (skill?.argsNum as number) && item != 201: false,
 			};
 		});
+		
 		//console.log(SKILL_INFO);
 		/**
 		 * 逐个描述进行数据对齐
 		 */
 		SKILL_INFO.技能描述及参数.forEach((item) => {
+			if(item.技能效果ID==31){
+				finalResult+=`1回合做${item.参数[0]}~${item.参数[1]}次攻击。`
+				return
+			}
 			if (item.效果描述) {
 				if (item.特殊描述标记) {
 					if (item.该描述所需参数数量 === 6) {
@@ -253,30 +257,42 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 			} else {
 				finalResult = '该技能无效果。';
 			}
-		});
-		if (EffectTypeParam) {
-			if (
-				EffectTypeParam.includes('1,1,1') ||
-				EffectTypeParam.includes('1,0,0') ||
-				EffectTypeParam.includes('1,2,2') ||
-				EffectTypeParam.includes('1,2,1') ||
-				EffectTypeParam.includes('1,3,3|1,6,6')
-			) {
-				while (RegExp(/对手\d{1,2}/).test(finalResult)) {
-					let index = finalResult.search(/对手\d{1,2}/);
-					let status = finalResult[index + 2].concat(Number.isNaN(parseInt(finalResult[index + 3])) ? '' : finalResult[index + 3]);
-					//console.log(status);
-					finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(status)]); //替换*号为对应的异常状态汉语名称
+			if (EffectTypeParam) {
+				if(item.技能效果ID==849){
+					finalResult=finalResult.replace("对手", "对手"+item.参数[1])//在这里不能替换undefined，因为undefined可能是因为参数缺失造成的
 				}
-				while (RegExp(/\d{1,2}状态/).test(finalResult)) {
-					//第二种情况：‘若对手处于XX状态’
-					let _index = finalResult.search(/\d{1,2}状态/);
-					let _status = finalResult[_index];
-					finalResult = finalResult.replace(/\d{1,2}状态/, '*状态').replace('*', DescriptionMapping.YiChang[parseInt(_status)]); //替换*号为对应的异常状态汉语名称
+				if (
+					EffectTypeParam.includes('1,1,1') ||
+					EffectTypeParam.includes('1,0,0') ||
+					EffectTypeParam.includes('1,2,2') ||
+					EffectTypeParam.includes('1,2,1') ||
+					EffectTypeParam.includes('1,3,3|1,6,6')
+				) {
+					while (RegExp(/使对手\d{1,2}/).test(finalResult)||RegExp(/令对手\d{1,2}/).test(finalResult)) {
+						let index = finalResult.search(/对手\d{1,2}/);
+						let status = finalResult[index + 2].concat(Number.isNaN(parseInt(finalResult[index + 3])) ? '' : finalResult[index + 3]);
+						let correctStatus =''
+						if(~~status>32){
+							correctStatus = status[0]
+							finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(correctStatus)]+status[1]);
+						}else{
+							finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(status)]);
+						}
+						//console.log(status);
+					 //替换*号为对应的异常状态汉语名称
+					}
+					while (RegExp(/\d{1,2}状态/).test(finalResult)) {
+						//第二种情况：‘若对手处于XX状态’
+						let _index = finalResult.search(/\d{1,2}状态/);
+						let _status = finalResult[_index];
+						finalResult = finalResult.replace(/\d{1,2}状态/, '*状态').replace('*', DescriptionMapping.YiChang[parseInt(_status)]); //替换*号为对应的异常状态汉语名称
+					}
 				}
+				
 			}
-		}
-		finalResult = finalResult.replace('++', '+').replace('。。', '。').replace('222', '混沌').replace('--', '-');
+		});
+		
+		finalResult = finalResult.replace('++', '+').replace('。。', '。').replace('222', '混沌').replace('--', '-').replace('undefined','');
 		try {
 			localStorage.setItem(move.ID + '', finalResult);
 		} catch (error) {
@@ -302,7 +318,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					{'PP：' + move.MaxPP}/{move.MaxPP}
 				</p>
 			</div>
-			<div id="desc" className={styles.desc}>
+			<div id="desc" className={styles.desc} style={{}}>
 				<div style={{ fontSize: 10 ,color: 'rgb(165,220,255)' }}>
 					<p>技能ID：{move.ID}</p>
 					效果ID:{move.SideEffect?move.SideEffect.toString().split(' ').map((item, index) => <Link to={`/skill/${item}`} className={styles.effectID} key={index}>{item}</Link>):'无'}
@@ -317,7 +333,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					{move.Priority ? '先制:' + (move.Priority > 0 ? '+' + move.Priority : move.Priority) : null}
 				</h4>
 				{move.MustHit == 1 ? <p style={{ fontSize: 18, color: 'rgb(100,225,249)' }}>必中</p> : null}
-				<div>学习等级:{learningLv}</div>
+				{learningLv&&<div>学习等级:{learningLv}</div>}
 				<div style={{ display: move.MustHit == 1 ? 'none' : 'block',color:'goldenrod'}}>精准度:{move.Accuracy}</div>
 				<div style={{ display: move.Category == 4 && move.ID >= 20000 ? 'none' : 'block' ,color: 'red' }}>
 					暴击率:{typeof move.CritRate === 'undefined' ? '1' : move.CritRate}/16

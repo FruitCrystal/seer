@@ -36,10 +36,9 @@
 	/*filter: drop-shadow(16px 16px 20px red);*/
 	width: 143px;
 	height:60px;
-	
 	background-image: linear-gradient(145deg,rgb(17, 142, 221), rgb(2,102,184));
 	display: flex;
-	margin: 5px 3px 5px 2px;
+	margin: 2px 3px 3px 2px;
 	padding: 5px 6px 0 6px;
 	justify-content: space-between;
 	flex-direction: row-reverse;
@@ -52,8 +51,8 @@
 .desc {
 	position: absolute;
 	overflow: hidden;
-	left: 143px;
-	top: -20px;
+	left: 100px;
+	top: -10px;
 	width: 190px;
 	height: 0;
 	background-color: #1a1616aa;

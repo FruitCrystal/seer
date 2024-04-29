@@ -8,12 +8,14 @@ export const Counter = () => {
 	const dataBase = useContext(dataContext);
 	const counter_marks: iCounterMark = dataBase.get('mintmark');
 	const [page, setPage] = useState(1);
-
+	const counter_marks_reversed = counter_marks.MintMarks.MintMark.reverse();
 	return (
 		<div>
 			<div style={{width: '100%', height: 70, backgroundColor: '#eee'}}></div>
 			<div
 			style={{
+				minHeight: 444,
+					overflow:'hidden',
 				minWidth: '100%',
 				display: 'flex',
 				flexDirection: 'column',
@@ -25,6 +27,8 @@ export const Counter = () => {
 		>
 			<div
 				style={{
+					minHeight: 444,
+					overflow:'hidden',
 					margin: '0 auto',
 					width: '100%',
 					display: 'flex',
@@ -34,7 +38,7 @@ export const Counter = () => {
 					flexWrap: 'wrap',
 				}}
 			>
-				{counter_marks.MintMarks.MintMark.slice((page - 1) * 32, page * 32).map((mark, index) => (
+				{counter_marks.MintMarks.MintMark.reverse().slice((page - 1) * 32, page * 32).map((mark, index) => (
 					<CounterMark key={index} counter={mark} />
 				))}
 			</div>
