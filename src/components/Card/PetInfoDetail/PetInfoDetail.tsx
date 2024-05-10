@@ -124,8 +124,8 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 								marginLeft: 10,
 							}}
 						>
-							<div>{monsterDetail.DefName}</div>
-							<div>
+							<div style={{color:'lightblue',fontSize:15}}>{monsterDetail.DefName}</div>
+							<div style={{display:'flex',alignItems:'center',fontSize:14}}>
 								<img src={`http://seerh5.61.com/resource/assets/PetType/${monsterDetail.Type}.png`} alt="" width={24} height={24} />
 								{TYPE_MAP.get(monsterDetail.Type) + '系'}
 							</div>
@@ -168,12 +168,12 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 					//有没有魂印,决定显示与否
 					style={{ display: effect ? 'block' : 'none', paddingTop: 18, overflowY: 'scroll',height:235 }}
 				>
-					<p style={{ fontSize: 20, color: 'gold' }}>{!Advance?'进阶':''}魂印:</p>
-					{effect&&Advance?effect.split('|').map((item, index) => (
+					<p style={{ fontSize: 20, color: 'gold' }}>{!Advance&&advanceInfo?'进阶':''}魂印:</p>
+					{!Advance&&advanceInfo?advanceEffectIcon?.split('|').map((item, index) => (
 						<div style={{ marginBottom: 5 }} key={index}>
 							&nbsp;&nbsp;{item}
 						</div>
-					)):advanceEffectIcon?.split('|').map((item, index) => (
+					)):effect?.split('|').map((item, index) => (
 						<div style={{ marginBottom: 5 }} key={index}>
 							&nbsp;&nbsp;{item}
 						</div>
