@@ -37,7 +37,7 @@ export const DescriptionMapping:{AbilityMapping:{[key:number]:string},[key:strin
 	}
 }
 
-export const TYPE_MAP = new Map(new Map([
+export const TYPE_MAP = new Map([
 	[0,"所有"],
 	[
 			1,
@@ -547,5 +547,5 @@ export const TYPE_MAP = new Map(new Map([
 			226,
 			"虚空"
 	]
-]));
+]);
 	

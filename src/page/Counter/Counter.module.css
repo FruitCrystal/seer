@@ -6,3 +6,47 @@
 	box-shadow: 0px 0px 5px #00000030;
 
 }
+.Count_table {
+	width: 100%;
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.Count_thead,
+.Count_tfoot {
+  background-color: rgb(228 240 245);
+}
+
+.Count_th,
+.Count_td {
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+}
+.Count_tr:hover{
+	cursor: pointer;
+	background-color: rgb(133, 133, 133);
+}
+.Count_td:last-of-type {
+  text-align: center;
+}
+
+/*tbody > tr:nth-of-type(even) {
+  background-color: rgb(237 238 242);
+}*/
+.searchInput{
+	width: 200px;
+	height: 30px;
+}
+.searchInput::placeholder{
+	font-size:12px;
+	font-family: 'seerFont';
+}
+tfoot th {
+  text-align: right;
+}
+
+tfoot td {
+  font-weight: bold;
+}

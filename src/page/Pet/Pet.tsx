@@ -244,10 +244,12 @@ export const Pet = () => {
 								}
 								const value = e.currentTarget.value;
 								if (parseInt(value)) {
+									setPage(1)
 									let move = moves.find((item) => item.ID == parseInt(value));
 									setSKILL_NAME(move?.Name as string);
 									setResult(monsters.filter(item=>item.LearnableMoves.Move.find(_item=>_item.ID===parseInt(e.currentTarget.value))))
 								} else {
+									setPage(1)
 									let move = moves.filter((item) => item.Name == value);
 									let movesID = move.map(item=>item.ID);
 									setResult(monsters.filter(item=>item.LearnableMoves.Move.find(_item=>movesID.includes(_item.ID))))

@@ -5,3 +5,6 @@ export function getSomeRandomPetID(amout: number,maximum: number,minimum: number
 	}
 	return Array.from(new Set(resultSet));
 }
+export function sum(arr: (number | string)[]): number {
+	return ~~arr.reduce((acc, cur) => ~~acc + ~~cur, 0);
+}

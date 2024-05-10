@@ -5,6 +5,7 @@ import { MoveDetail, iMove } from '../../interface/iMove';
 import { dataContext } from '../../utils/context';
 import styles from './SkillPanel.module.css';
 import { useContext, useMemo } from 'react';
+import {TYPE_MAP} from '../../utils/commonData';
 const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: number; extraMoveID?: (number | undefined)[] }) => {
 	const data = useContext(dataContext);
 	function genDesc(text: string, params: any[]) {
@@ -21,7 +22,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 				finalResult += desList[i];
 			}
 		}
-		return finalResult;
+		return finalResult+'。';
 	}
 
 	const movesData: iMove = data.get('moves');
@@ -33,7 +34,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 	 * @param moveEffect 从数据库中获取的技能效果数据
 	 */
 	let moveEffect: iEffectInfo = data.get('effectInfo');
-	moveEffect.root.Effect.push({id: 31, info: '1回合做{0}~{1}次攻击。', argsNum: 2})
 	/**
 	 * @param EffectID 单个技能所持有的效果ID
 	 */
@@ -88,7 +88,6 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 		EffectID.forEach((item, index) => {
 			let skill = moveEffect.root.Effect.find((i) => i.id == item);
 			EffectTypeParam += skill?.param ? skill.param : '';
-			console.log(EffectTypeParam);
 			SKILL_INFO.技能描述及参数[index] = {
 				效果描述: skill?.info,
 				参数: EffectArg?.splice(0, skill?.argsNum),
@@ -110,6 +109,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 			if (item.效果描述) {
 				if (item.特殊描述标记) {
 					if (item.该描述所需参数数量 === 6) {
+						
 						let insert = '';
 						item.参数.forEach((param, index) => {
 							let isNegative = parseInt(param as string) > 0 ? false : true;
@@ -121,6 +121,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 						});
 						finalResult += item.效果描述.replace('{0}', insert);
 					} else {
+						
 						//这里处理那些技能参数位与参数个数对不上的技能，多见于能力提升类技能
 						//console.log(SKILL_INFO.技能名);
 						//一、数组切片，划分每个参数位所需的参数个数，通常来说，一个参数位只容纳一个参数，但这类技能有一个参数为会容纳6个参数（攻击、特攻、防御、特防、速度、命中各对应一个参数），所以需要特殊处理
@@ -134,6 +135,7 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 								paramIndex.push(desList[i + 1]);
 							}
 						}
+						
 						//分块:如果技能所需参数的空位是{0}，{1}，{2}，{3}则说明3号位置需接受6个参数，如果技能所需参数的空位是{0}，{7}，则0号位需要接受6个参数
 						paramIndex.map((_item, index) => {
 							if (parseInt(_item) - parseInt(paramIndex[index + 1]) === -1) {
@@ -155,9 +157,9 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 										: delete specialChunck[index];
 								});
 								chunck[index] = specialChunck.filter((i) => i != undefined);
+								console.log(item,chunck,paramIndex);
 							}
 						});
-
 						finalResult += genDesc(item.效果描述, chunck);
 						if (item.技能效果ID == '1823') {
 							finalResult = finalResult.replace('则令1', '则令对手');
@@ -168,6 +170,20 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					//let length = item.效果描述?.length;
 					//console.log(item.效果描述.length===desList.length);
 					let isAbilityAdvance = item.效果描述.match(/\d/g)?.join('').includes('102');
+					if(item.技能效果ID==516){
+						console.log(item);
+					}
+					if(item.技能效果ID==42){
+						console.log(item);
+					}
+					if(item.技能效果ID===164){
+						console.log(item);
+					}
+					if(item.技能效果ID==613||item.技能效果ID===1999){
+						let des = item.效果描述;
+						finalResult += des.replace('{0}',item.参数[0] +'').replace('{1}',TYPE_MAP.get(~~item.参数[1]) +'')+"。"
+						return;
+					}
 					if(item.技能效果ID==492){
 						let des = item.效果描述;
 						finalResult +=
@@ -180,12 +196,21 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 								.replace('{5}', item.参数[5] + '')+'。'
 								return;
 					}
+					if(item.技能效果ID==757){
+						let des = item.效果描述;
+						finalResult +=
+							des
+								.replace('{0}', DescriptionMapping.YiChang[parseInt(item.参数[0] as string)])
+								.replace('{1}', item.参数[1] + '')
+								.replace('{2}', DescriptionMapping.YiChang[parseInt(item.参数[2] as string)])+"。"
+								return;
+					}
 					if(item.技能效果ID==493){
 						let des = item.效果描述;
 						finalResult +=
 							des
 								.replace('{0}', item.参数[0] + '')
-								.replace('{1}', '1')
+								.replace('{1}', '1')+"。"
 							return;
 					}
 					if (item.技能效果ID == 588 || item.技能效果ID == 678) {
@@ -237,7 +262,9 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 							.replace('{2}', !isNegative ? '+' + item.参数[2] + '' : '' + item.参数[2] + '');
 						finalResult += '。';
 					} else {
+						//通用方法，所有特例之外的技能效果描述都可以用这个方法处理
 						finalResult += genDesc(item.效果描述, item.参数);
+						return;
 						//finalResult += replaceNumbersWithValues(item.效果描述, item.参数);
 						//for (let i = 0; i < length; i++) {
 						//	if (desList[i] === '{') {
@@ -252,46 +279,44 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					}
 				}
 			}
-			if (finalResult.length > 0) {
-				finalResult += '。';
-			} else {
-				finalResult = '该技能无效果。';
-			}
 			if (EffectTypeParam) {
 				if(item.技能效果ID==849){
-					finalResult=finalResult.replace("对手", "对手"+item.参数[1])//在这里不能替换undefined，因为undefined可能是因为参数缺失造成的
+					finalResult+=finalResult.replace("对手", "对手"+item.参数[1])//在这里不能替换undefined，因为undefined可能是因为参数缺失造成的
 				}
-				if (
-					EffectTypeParam.includes('1,1,1') ||
-					EffectTypeParam.includes('1,0,0') ||
-					EffectTypeParam.includes('1,2,2') ||
-					EffectTypeParam.includes('1,2,1') ||
-					EffectTypeParam.includes('1,3,3|1,6,6')
-				) {
-					while (RegExp(/使对手\d{1,2}/).test(finalResult)||RegExp(/令对手\d{1,2}/).test(finalResult)) {
-						let index = finalResult.search(/对手\d{1,2}/);
-						let status = finalResult[index + 2].concat(Number.isNaN(parseInt(finalResult[index + 3])) ? '' : finalResult[index + 3]);
-						let correctStatus =''
-						if(~~status>32){
-							correctStatus = status[0]
-							finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(correctStatus)]+status[1]);
-						}else{
-							finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(status)]);
-						}
-						//console.log(status);
-					 //替换*号为对应的异常状态汉语名称
-					}
-					while (RegExp(/\d{1,2}状态/).test(finalResult)) {
-						//第二种情况：‘若对手处于XX状态’
-						let _index = finalResult.search(/\d{1,2}状态/);
-						let _status = finalResult[_index];
-						finalResult = finalResult.replace(/\d{1,2}状态/, '*状态').replace('*', DescriptionMapping.YiChang[parseInt(_status)]); //替换*号为对应的异常状态汉语名称
-					}
-				}
-				
 			}
 		});
-		
+		if(
+			EffectTypeParam.includes('1,1,1') ||
+			EffectTypeParam.includes('1,0,0') ||
+			EffectTypeParam.includes('1,2,2') ||
+			EffectTypeParam.includes('1,2,1') ||
+			EffectTypeParam.includes('1,3,3|1,6,6')
+		) {
+			while (RegExp(/使对手\d{1,2}/).test(finalResult)||RegExp(/令对手\d{1,2}/).test(finalResult)||RegExp(/对手\d{1,2}/).test(finalResult)) {
+				let index = finalResult.search(/对手\d{1,2}/);
+				let status = finalResult[index + 2].concat(Number.isNaN(parseInt(finalResult[index + 3])) ? '' : finalResult[index + 3]);
+				let correctStatus =''
+				if(~~status>32){
+					correctStatus = status[0]
+					finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(correctStatus)]+status[1]);
+				}else{
+					finalResult = finalResult.replace(/对手\d{1,2}/, '对手*').replace('*', DescriptionMapping.YiChang[parseInt(status)]);
+				}
+				//console.log(status);
+			 //替换*号为对应的异常状态汉语名称
+			}
+			while (RegExp(/\d{1,2}状态/).test(finalResult)) {
+				//第二种情况：‘若对手处于XX状态’
+				let _index = finalResult.search(/\d{1,2}状态/);
+				let _status = finalResult[_index];
+				finalResult = finalResult.replace(/\d{1,2}状态/, '*状态').replace('*', DescriptionMapping.YiChang[parseInt(_status)]); //替换*号为对应的异常状态汉语名称
+			}
+	}
+		if (finalResult.length > 0) {
+			finalResult += '。';
+		} else {
+			finalResult = '该技能无效果。';
+		}
 		finalResult = finalResult.replace('++', '+').replace('。。', '。').replace('222', '混沌').replace('--', '-').replace('undefined','');
 		try {
 			localStorage.setItem(move.ID + '', finalResult);
@@ -343,9 +368,8 @@ const SkillPanel = ({ moveID, learningLv }: { moveID: number; learningLv?: numbe
 					<div style={{ marginBottom: 3, fontSize: 11 }}>
 						{MemogenerateSkillDesPlus.split('。').map((item, index) =>
 							item ? (
-								<p key={index}>
+								<p key={index} style={{marginBottom: 3}}>
 									{item}
-									<br></br>
 								</p>
 							) : (
 								''

@@ -9,17 +9,34 @@ import { MonsterHead } from '../../MonsterHead/MonsterHead';
 import { IMoveLang } from '../../../interface/iMoveLang';
 import PageSwitcher from '../../PageSwitcher/PageSwitcher';
 import { TYPE_MAP } from '../../../utils/commonData';
+import iPetAdvance from '../../../interface/Monster';
+import {sum} from '../../../utils/tools';
 const PetInfoDetail = ({ petID }: { petID: number }) => {
 	const [page, setPage] = useState(1);
 	const data = useContext(dataContext);
+	const HunYin: iEffectIcon = data.get('effectIcon');
 	const LangsData: IMoveLang = data.get('movesLang');
 	const Lang = LangsData.root.moves.find((item) => item.id === petID);
 	const Langs = Lang?.lang;
 	const monsterDetail: iMonsterDetail = data.get('monsters').Monsters.Monster.find((item: { ID: number }) => item.ID === petID);
+
+	const petAdvance:iPetAdvance = data.get('pet_advance');
+	const totalRace = monsterDetail.Atk + monsterDetail.Def + monsterDetail.HP + monsterDetail.Spd + monsterDetail.SpAtk + monsterDetail.SpDef
+	const advanceInfo = petAdvance.root.Task.find((item) => item.Advances.MonsterId === petID);
+	const [Advance, setShowAdvance] = useState(false);
+	const advanceEffectIcon = HunYin.root.effect.find((item) => item.Id === advanceInfo?.Advances.AdvEffect.Id)?.tips;
+	/**
+	 * 0 体力
+	 * 1 攻击
+	 * 2 防御
+	 * 3 特攻
+	 * 4 特防
+	 * 5 速度
+	 */
+	let newRace: string[] = advanceInfo? advanceInfo.Advances.Race.NewRace.split(' ')	: [];
 	//const pet_book: IPetBook = data.get('petbook');
 	//const monsterBrief = pet_book.root.Monster.find((item: IMonsterBrief) => item.ID === petID) as IMonsterBrief;
-	console.log(monsterDetail);
-	const HunYin: iEffectIcon = data.get('effectIcon');
+	
 	/**
 	 * @param ExtraMoveID 额外技能,包括特训给的第五技能，活动道具开启的第五技能，神谕给的第五技能
 	 */
@@ -38,8 +55,8 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 
 	const AllMoves: any[] = [];
 	monsterDetail.LearnableMoves.Move.map((item) => AllMoves.push({move:item,mark:0}));
-	AdvMoves?.map((item) => AllMoves.push({move:item,mark:2}));
 	ExtraMoveID ? AllMoves.push({move:ExtraMoveID,mark:2}) : null;
+	AdvMoves?.map((item) => AllMoves.push({move:item,mark:2}));
 	spExtraMoveID ? AllMoves.push({move:spExtraMoveID.Move,mark:1}) : null;
 	ExtraMovesID ? AllMoves.push({move:ExtraMovesID.Move,mark:1}) : null;
 	spMove? AllMoves.push({move:spMove[0],mark:2}) : null;
@@ -115,19 +132,34 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 						</div>
 					</div>
 				</div>
-				<div style={{}}>
+				<div style={{position:'relative'}}>
 					<div style={{ fontSize: 20, color: 'gold' }}>
 						种族值:
-						{monsterDetail.Atk + monsterDetail.Def + monsterDetail.HP + monsterDetail.Spd + monsterDetail.SpAtk + monsterDetail.SpDef}
+						{Advance?totalRace:sum(newRace)?sum(newRace):totalRace}
+
 					</div>
+					{advanceInfo&&<div className={styles.advance_switcher} style={{color:!Advance?'greenyellow':'#000000',textShadow:!Advance?'0 0 3px black':'none',cursor:'pointer'}} onClick={() => setShowAdvance(!Advance)}>当前：{Advance?'未进阶':'进阶'}</div>}
 					<div className={styles.chart}>
 						<div style={{ marginLeft: 8, marginTop: 6 }}>
-							<Power item={'攻击'} value={monsterDetail.Atk}></Power>
-							<Power item={'特攻'} value={monsterDetail.SpAtk}></Power>
-							<Power item={'速度'} value={monsterDetail.Spd}></Power>
-							<Power item={'防御'} value={monsterDetail.Def}></Power>
-							<Power item={'特防'} value={monsterDetail.SpDef}></Power>
-							<Power item={'体力'} value={monsterDetail.HP}></Power>
+							{
+								!Advance&&advanceInfo?
+								<div>
+									<Power item={'攻击'} value={~~newRace[1]}></Power>
+									<Power item={'特攻'} value={~~newRace[3]}></Power>
+									<Power item={'速度'} value={~~newRace[5]}></Power>
+									<Power item={'防御'} value={~~newRace[2]}></Power>
+									<Power item={'特防'} value={~~newRace[4]}></Power>
+									<Power item={'体力'} value={~~newRace[0]}></Power>
+							</div>:
+							<div>
+								<Power item={'攻击'} value={monsterDetail.Atk}></Power>
+								<Power  item={'特攻'} value={monsterDetail.SpAtk}></Power>
+								<Power item={'速度'} value={monsterDetail.Spd}></Power>
+								<Power item={'防御'} value={monsterDetail.Def}></Power>
+								<Power  item={'特防'} value={monsterDetail.SpDef}></Power>
+								<Power  item={'体力'} value={monsterDetail.HP}></Power>
+							</div>
+							}
 						</div>
 					</div>
 				</div>
@@ -136,8 +168,12 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 					//有没有魂印,决定显示与否
 					style={{ display: effect ? 'block' : 'none', paddingTop: 18, overflowY: 'scroll',height:235 }}
 				>
-					<p style={{ fontSize: 20, color: 'gold' }}>魂印:</p>
-					{effect?.split('|').map((item, index) => (
+					<p style={{ fontSize: 20, color: 'gold' }}>{!Advance?'进阶':''}魂印:</p>
+					{effect&&Advance?effect.split('|').map((item, index) => (
+						<div style={{ marginBottom: 5 }} key={index}>
+							&nbsp;&nbsp;{item}
+						</div>
+					)):advanceEffectIcon?.split('|').map((item, index) => (
 						<div style={{ marginBottom: 5 }} key={index}>
 							&nbsp;&nbsp;{item}
 						</div>
@@ -163,7 +199,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 
 			<div className={styles.right}>
 				{AllMoves.slice((page - 1) * 25, page * 25).map((item,index) => (
-					<div style={{position: 'relative'}}>
+					<div key={index} style={{position: 'relative'}}>
 						{item.mark==1?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>第五技能</p>:item.mark==2?<p style={{position: 'absolute', bottom: 8, right: 7, fontSize: 12, color: 'rgb(165,187,177)',zIndex: 100}}>追加技能</p>:null}
 						<SkillPanel key={index} moveID={item.move.ID? item.move.ID : 10001} learningLv={item.move.LearningLv ? item.move.LearningLv : 0}></SkillPanel>
 					</div>

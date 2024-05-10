@@ -5,7 +5,17 @@
 	animation-duration: 0.2s;
 	animation-direction:forwards;
 }
-
+.advance_switcher{
+	position: absolute;
+	right: 6px;
+	top: 0;
+	cursor: pointer;
+	
+}
+.advance_switcher:hover{
+	color: greenyellow;
+	text-shadow: 1px 1px 2px black;
+}
 .left{
 	/*position: relative;*/
 	height: 100%;

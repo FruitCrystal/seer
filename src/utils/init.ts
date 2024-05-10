@@ -21,9 +21,10 @@ export let PROGRESS_MAP: Map<string, string> = new Map([
 	['mintmark','刻印'],
 	['peak_battle_mons','巅峰主场'],
 	['signIcon_fight','战斗标记类描述'],
-	['sp_hide_moves','精灵追加技能']
+	['sp_hide_moves','精灵追加技能'],
+	['pet_advance','精灵进阶']
 ]);
-export type TData = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','mintmark','peak_battle_mons']
+export type TData = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','mintmark','peak_battle_mons','pet_advance']
 /**
  * 
  * 	初始化数据,获取版本号,精灵,道具,魂印,技能数据
@@ -37,7 +38,7 @@ export async function init(setProgress: Function) {
 	const json = resource.files.resource.config.json;
 	data.set('version', version)
 	//console.log(resource)
-	const essential = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','pvp_ban','mintmark','peak_battle_mons']
+	const essential = ['monsters', 'moves', 'hide_moves', 'items', 'itemsTip', 'gems', 'equip', 'effectDes', 'effectInfo', 'effectIcon', 'effectbuff', 'petbook', 'skillTypes', 'suit', 'pet_skin', 'ogre','movesLang','bossEffectIcon','pvp_ban','mintmark','peak_battle_mons','pet_advance']
 	let index = 1;
 	for (const item of essential) {
 			if(item==='pvp_ban'){
@@ -46,8 +47,8 @@ export async function init(setProgress: Function) {
 			}else{
 				const result = await (await fetch(`https://seerh5.61.com/resource/config/xml/${xml[item+'.json']}`)).json()
 				data.set(item, result)
+				item=='effectInfo'&&data.get('effectInfo').root.Effect.push({id: 31, info: '1回合做{0}~{1}次攻击。', argsNum: 2},{id:42,info:'电系技能威力翻倍。',argsNum:1})
 			}
-
 			index++;
 			setProgress({ item, index })
 	}
