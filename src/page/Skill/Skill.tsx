@@ -61,8 +61,11 @@ export const Skill = () => {
 	*/
 	useEffect(() => {
 		//由于Params.id是不可变的，所以从技能效果ID跳转到技能页面时，只需要设置一次
+		console.log(PARAMS);
+		setType(0)
+		setEffectID(PARAMS.id)
 		setPage(1);
-		if(effectID&&PARAMS.id){
+		if(PARAMS.id){
 			setMoves_after_filter(
 					moves_List.filter((move) =>
 						move.SideEffect?.toString()
@@ -70,8 +73,6 @@ export const Skill = () => {
 							.includes(PARAMS.id as string)
 					)
 			)
-		}else{
-			reset()
 		}
 	}, [PARAMS.id]);
 
@@ -93,7 +94,7 @@ export const Skill = () => {
 			setPage(1);
 			setMoves_after_filter(moves_List.filter((move) => move.Type == type));
 		} else {
-			reset();
+			
 		}
 		setPage(1);
 	}, [type]);

@@ -52,7 +52,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 	//spExtraMoveID ? (num += 1) : null;
 	//ExtraMoveID ? (num += 1) : null;
 	//console.log(num);
-
+	console.log(AdvMoves);
 	const AllMoves: any[] = [];
 	monsterDetail.LearnableMoves.Move.map((item) => AllMoves.push({move:item,mark:0}));
 	ExtraMoveID ? AllMoves.push({move:ExtraMoveID,mark:2}) : null;
@@ -102,7 +102,7 @@ const PetInfoDetail = ({ petID }: { petID: number }) => {
 							left: 5,
 						}}
 					>
-						<MonsterHead id={monsterDetail.ID}></MonsterHead>
+						<MonsterHead id={monsterDetail.ID} advance={advanceInfo?true:false}></MonsterHead>
 						{/*<img
 							src={`http://seerh5.61.com/resource/assets/pet/head/${monsterBrief.ID}.png`}
 							alt=""

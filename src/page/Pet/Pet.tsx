@@ -258,6 +258,9 @@ export const Pet = () => {
 						}}
 						onChange={(e) => {
 							setSearchingSkillName(e.currentTarget.value);
+							setPage(1);
+							setType(0);
+							setFilter({ ...filter, keyword: undefined, gender: 3, type: 0, IDAsce: true, canCatch: undefined });
 						}}
 						onFocus={() => setTipsVisible(true)}
 						onBlur={() => setTipsVisible(false)}
